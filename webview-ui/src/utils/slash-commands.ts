@@ -17,12 +17,12 @@ export const DEFAULT_SLASH_COMMANDS: SlashCommand[] = [
 	},
 	{
 		name: "newrule",
-		description: "Create a new Cline rule based on your conversation",
+		description: "Create a new BluesAICoder rule based on your conversation",
 		section: "default",
 	},
 	{
 		name: "reportbug",
-		description: "Create a Github issue with Cline",
+		description: "Create a Github issue with BluesAICoder",
 		section: "default",
 	},
 ]

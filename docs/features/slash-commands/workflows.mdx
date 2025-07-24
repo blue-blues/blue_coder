@@ -9,10 +9,10 @@ To invoke a workflow, type `/[workflow-name.md]` in the chat.
 
 ## How to Create and Use Workflows
 
-Workflows live alongside [Cline Rules](/features/cline-rules). Creating one is straightforward:
+Workflows live alongside [Cline Rules](/features/bluesaicoder-rules). Creating one is straightforward:
 
 <Frame>
-	<img src="https://storage.googleapis.com/cline_public_images/docs/assets/workflows.png" alt="Workflows tab in Cline" />
+	<img src="https://storage.googleapis.com/bluesaicoder_public_images/docs/assets/workflows.png" alt="Workflows tab in Cline" />
 </Frame>
 
 1. Create a markdown file with clear instructions for the steps Cline should take
@@ -22,7 +22,7 @@ Workflows live alongside [Cline Rules](/features/cline-rules). Creating one is s
 
 The real power comes from how you structure your workflow files. You can:
 
--   Leverage Cline's [built-in tools](/exploring-clines-tools/cline-tools-guide) like `ask_followup_question`, `read_file`, `search_files`, and `new_task`
+-   Leverage Cline's [built-in tools](/exploring-bluesaicoders-tools/bluesaicoder-tools-guide) like `ask_followup_question`, `read_file`, `search_files`, and `new_task`
 -   Use command-line tools you already have installed like `gh` or `docker`
 -   Reference external [MCP tool calls](/mcp/mcp-overview) like Slack or Whatsapp
 -   Chain multiple actions together in a specific sequence
@@ -32,7 +32,7 @@ The real power comes from how you structure your workflow files. You can:
 I created a PR Review workflow that's already saving me tons of time.
 
 ````md pr-review.md [expandable]
-You have access to the `gh` terminal command. I already authenticated it for you. Please review it to use the PR that I asked you to review. You're already in the `cline` repo.
+You have access to the `gh` terminal command. I already authenticated it for you. Please review it to use the PR that I asked you to review. You're already in the `bluesaicoder` repo.
 
 <detailed_sequence_of_steps>
 
@@ -427,7 +427,7 @@ My workflow uses the `gh` command-line tool and Cline's built in `ask_followup_q
 
 This has taken my PR review process from a manual, multi-step operation to a single command that gives me everything I need to make an informed decision.
 
-> This is just one example of a workflow file. You can find more in our [prompts repository](https://github.com/cline/prompts) for inspiration.
+> This is just one example of a workflow file. You can find more in our [prompts repository](https://github.com/bluesaicoder/prompts) for inspiration.
 
 ## Building Your Own Workflows
 

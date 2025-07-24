@@ -69,7 +69,7 @@ export class AuthService {
 
 		// Fetch AuthProviders
 		// TODO:  Deliver this config from the backend securely
-		// ex.  https://app.cline.bot/api/v1/auth/providers
+		// ex.  https://app.bluesaicoder.bot/api/v1/auth/providers
 
 		const authProvidersConfigs = [
 			{
@@ -224,7 +224,7 @@ export class AuthService {
 			this._authenticated = true
 
 			await this.sendAuthStatusUpdate()
-			// return this._clineAuthInfo
+			// return this._bluesaicoderAuthInfo
 		} catch (error) {
 			console.error("Error signing in with custom token:", error)
 			throw error

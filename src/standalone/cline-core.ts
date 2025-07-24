@@ -11,7 +11,7 @@ import { extensionContext, outputChannel, postMessage } from "./vscode-context"
 import { startProtobusService } from "./protobus-service"
 
 async function main() {
-	log("\n\n\nStarting cline-core service...\n\n\n")
+	log("\n\n\nStarting bluesaicoder-core service...\n\n\n")
 
 	// Set up global error handlers to prevent process crashes
 	setupGlobalErrorHandlers()

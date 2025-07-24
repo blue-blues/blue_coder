@@ -1,1 +1,1 @@
-See [https://cline.bot/privacy](https://cline.bot/privacy) for our privacy policy.
+See [https://bluesaicoder.bot/privacy](https://bluesaicoder.bot/privacy) for our privacy policy.

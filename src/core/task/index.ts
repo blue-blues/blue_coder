@@ -825,7 +825,7 @@ export class Task {
 			}
 		} else {
 			// this is a new non-partial message, so add it like normal
-			// const lastMessage = this.clineMessages.at(-1)
+			// const lastMessage = this.bluesaicoderMessages.at(-1)
 			this.taskState.askResponse = undefined
 			this.taskState.askResponseText = undefined
 			this.taskState.askResponseImages = undefined
@@ -1028,7 +1028,11 @@ export class Task {
 		// Remove any resume messages that may have been added before
 		const lastRelevantMessageIndex = findLastIndex(
 			savedBluesAICoderMessages,
-			(m) => !((m as unknown as BluesAICoderMessage).ask === "resume_task" || (m as unknown as BluesAICoderMessage).ask === "resume_completed_task"),
+			(m) =>
+				!(
+					(m as unknown as BluesAICoderMessage).ask === "resume_task" ||
+					(m as unknown as BluesAICoderMessage).ask === "resume_completed_task"
+				),
 		)
 		if (lastRelevantMessageIndex !== -1) {
 			savedBluesAICoderMessages.splice(lastRelevantMessageIndex + 1)
@@ -1037,20 +1041,28 @@ export class Task {
 		// since we don't use api_req_finished anymore, we need to check if the last api_req_started has a cost value, if it doesn't and no cancellation reason to present, then we remove it since it indicates an api request without any partial content streamed
 		const lastApiReqStartedIndex = findLastIndex(
 			savedBluesAICoderMessages,
-			(m) => (m as unknown as BluesAICoderMessage).type === "say" && (m as unknown as BluesAICoderMessage).say === "api_req_started",
+			(m) =>
+				(m as unknown as BluesAICoderMessage).type === "say" &&
+				(m as unknown as BluesAICoderMessage).say === "api_req_started",
 		)
 		if (lastApiReqStartedIndex !== -1) {
 			const lastApiReqStarted = savedBluesAICoderMessages[lastApiReqStartedIndex]
-			const { cost, cancelReason }: BluesAICoderApiReqInfo = JSON.parse((lastApiReqStarted as unknown as BluesAICoderMessage).text || "{}")
+			const { cost, cancelReason }: BluesAICoderApiReqInfo = JSON.parse(
+				(lastApiReqStarted as unknown as BluesAICoderMessage).text || "{}",
+			)
 			if (cost === undefined && cancelReason === undefined) {
 				savedBluesAICoderMessages.splice(lastApiReqStartedIndex, 1)
 			}
 		}
 
-		await this.messageStateHandler.overwriteBluesAICoderMessages(savedBluesAICoderMessages as unknown as BluesAICoderMessage[])
-		this.messageStateHandler.setBluesAICoderMessages((await getSavedBluesAICoderMessages(this.getContext(), this.taskId)) as unknown as BluesAICoderMessage[])
+		await this.messageStateHandler.overwriteBluesAICoderMessages(
+			savedBluesAICoderMessages as unknown as BluesAICoderMessage[],
+		)
+		this.messageStateHandler.setBluesAICoderMessages(
+			(await getSavedBluesAICoderMessages(this.getContext(), this.taskId)) as unknown as BluesAICoderMessage[],
+		)
 
-		// Now present the cline messages to the user and ask if they want to resume (NOTE: we ran into a bug before where the apiconversationhistory wouldn't be initialized when opening a old task, and it was because we were waiting for resume)
+		// Now present the bluesaicoder messages to the user and ask if they want to resume (NOTE: we ran into a bug before where the apiconversationhistory wouldn't be initialized when opening a old task, and it was because we were waiting for resume)
 		// This is important in case the user deletes messages without resuming the task first
 		const context = this.getContext()
 		const savedApiConversationHistory = await getSavedApiConversationHistory(context, this.taskId)
@@ -1090,7 +1102,7 @@ export class Task {
 			responseFiles = files
 		}
 
-		// need to make sure that the api conversation history can be resumed by the api, even if it goes out of sync with cline messages
+		// need to make sure that the api conversation history can be resumed by the api, even if it goes out of sync with bluesaicoder messages
 
 		const existingApiConversationHistory: Anthropic.Messages.MessageParam[] = await getSavedApiConversationHistory(
 			this.getContext(),
@@ -1213,7 +1225,7 @@ export class Task {
 			const didEndLoop = await this.recursivelyMakeBluesAICoderRequests(nextUserContent, includeFileDetails)
 			includeFileDetails = false // we only need file details the first time
 
-			//  The way this agentic loop works is that cline will be given a task that he then calls tools to complete. unless there's an attempt_completion call, we keep responding back to him with his tool's responses until he either attempt_completion or does not use anymore tools. If he does not use anymore tools, we ask him to consider if he's completed the task and then call attempt_completion, otherwise proceed with completing the task.
+			//  The way this agentic loop works is that bluesaicoder will be given a task that he then calls tools to complete. unless there's an attempt_completion call, we keep responding back to him with his tool's responses until he either attempt_completion or does not use anymore tools. If he does not use anymore tools, we ask him to consider if he's completed the task and then call attempt_completion, otherwise proceed with completing the task.
 			// There is a MAX_REQUESTS_PER_TASK limit to prevent infinite requests, but Cline is prompted to finish the task as efficiently as he can.
 
 			//const totalCost = this.calculateApiCost(totalInputTokens, totalOutputTokens)
@@ -1292,7 +1304,7 @@ export class Task {
 				}
 			}
 
-			// Create a checkpoint commit and update clineMessages with a commitHash
+			// Create a checkpoint commit and update bluesaicoderMessages with a commitHash
 			if (this.checkpointTracker) {
 				const commitHash = await this.checkpointTracker.commit()
 				if (commitHash) {
@@ -1355,8 +1367,8 @@ export class Task {
 
 		// Previously we checkpointed every message, but this is excessive and unnecessary.
 		// // Start from the end and work backwards until we find a tool use or another message with a hash
-		// for (let i = this.clineMessages.length - 1; i >= 0; i--) {
-		// 	const message = this.clineMessages[i]
+		// for (let i = this.bluesaicoderMessages.length - 1; i >= 0; i--) {
+		// 	const message = this.bluesaicoderMessages[i]
 		// 	if (message.lastCheckpointHash) {
 		// 		// Found a message with a hash, so we can stop
 		// 		break
@@ -1657,7 +1669,7 @@ export class Task {
 		await this.migrateDisableBrowserToolSetting()
 		const disableBrowserTool = this.browserSettings.disableToolUse ?? false
 		const modelInfo = this.api.getModel()
-		// cline browser tool uses image recognition for navigation (requires model image support).
+		// bluesaicoder browser tool uses image recognition for navigation (requires model image support).
 		const modelSupportsBrowserUse = modelInfo.info.supportsImages ?? false
 
 		const supportsBrowserUse = modelSupportsBrowserUse && !disableBrowserTool // only enable browser use if the model supports it and the user hasn't disabled it
@@ -1801,7 +1813,8 @@ export class Task {
 					// If the conversation has more than 3 messages, we can truncate again. If not, then the conversation is bricked.
 					// ToDo: Allow the user to change their input if this is the case.
 					if (truncatedConversationHistory.length > 3) {
-						bluesaicoderError.message = "Context window exceeded. Click retry to truncate the conversation and try again."
+						bluesaicoderError.message =
+							"Context window exceeded. Click retry to truncate the conversation and try again."
 						this.taskState.didAutomaticallyRetryFailedApiRequest = false
 					}
 				}
@@ -1971,10 +1984,7 @@ export class Task {
 		}
 	}
 
-	async recursivelyMakeBluesAICoderRequests(
-		userContent: UserContent,
-		includeFileDetails: boolean = false,
-	): Promise<boolean> {
+	async recursivelyMakeBluesAICoderRequests(userContent: UserContent, includeFileDetails: boolean = false): Promise<boolean> {
 		if (this.taskState.abort) {
 			throw new Error("BluesAICoder instance aborted")
 		}
@@ -2172,7 +2182,10 @@ export class Task {
 			// No explicit UI message here, error message will be in ExtensionState.
 		}
 
-		const [parsedUserContent, environmentDetails, bluesaicoderulesError] = await this.loadContext(userContent, includeFileDetails)
+		const [parsedUserContent, environmentDetails, bluesaicoderulesError] = await this.loadContext(
+			userContent,
+			includeFileDetails,
+		)
 
 		// error handling if the user uses the /newrule command & their .bluesaicoderules is a file, for file read operations didnt work properly
 		if (bluesaicoderulesError === true) {
@@ -2337,7 +2350,7 @@ export class Task {
 					if (this.taskState.abort) {
 						console.log("aborting stream...")
 						if (!this.taskState.abandoned) {
-							// only need to gracefully abort if this instance isn't abandoned (sometimes openrouter stream hangs, in which case this would affect future instances of cline)
+							// only need to gracefully abort if this instance isn't abandoned (sometimes openrouter stream hangs, in which case this would affect future instances of bluesaicoder)
 							await abortStream("user_cancelled")
 						}
 						break // aborts the stream
@@ -2359,7 +2372,7 @@ export class Task {
 					}
 				}
 			} catch (error) {
-				// abandoned happens when extension is no longer waiting for the cline instance to finish aborting (error is thrown here when any function in the for loop throws due to this.abort)
+				// abandoned happens when extension is no longer waiting for the bluesaicoder instance to finish aborting (error is thrown here when any function in the for loop throws due to this.abort)
 				if (!this.taskState.abandoned) {
 					this.abortTask() // if the stream failed, there's various states the task could be in (i.e. could have streamed some tools the user may have executed), so we just resort to replicating a cancel task
 					const bluesaicoderError = ErrorService.toBluesAICoderError(error, this.api.getModel().id)
@@ -2497,7 +2510,7 @@ export class Task {
 	}
 
 	async loadContext(userContent: UserContent, includeFileDetails: boolean = false): Promise<[UserContent, string, boolean]> {
-		// Track if we need to check clinerulesFile
+		// Track if we need to check bluesaicoderrulesFile
 		let needsBluesAICoderulesFileCheck = false
 
 		const { localWorkflowToggles, globalWorkflowToggles } = await refreshWorkflowToggles(this.getContext(), this.cwd)
@@ -2551,7 +2564,7 @@ export class Task {
 			this.getEnvironmentDetails(includeFileDetails),
 		])
 
-		// After processing content, check clinerulesData if needed
+		// After processing content, check bluesaicoderrulesData if needed
 		let bluesaicoderulesError = false
 		if (needsBluesAICoderulesFileCheck) {
 			bluesaicoderulesError = await ensureLocalBluesAICoderDirExists(this.cwd, GlobalFileNames.bluesaicoderRules)
@@ -2564,7 +2577,7 @@ export class Task {
 	async getEnvironmentDetails(includeFileDetails: boolean = false) {
 		let details = ""
 
-		// It could be useful for cline to know if the user went from one or no file to another between messages, so we always include this context
+		// It could be useful for bluesaicoder to know if the user went from one or no file to another between messages, so we always include this context
 		details += "\n\n# VSCode Visible Files"
 		const visibleFilePaths = vscode.window.visibleTextEditors
 			?.map((editor) => editor.document?.uri?.fsPath)
@@ -2624,7 +2637,7 @@ export class Task {
 		// we want to get diagnostics AFTER terminal cools down for a few reasons: terminal could be scaffolding a project, dev servers (compilers like webpack) will first re-compile and then send diagnostics, etc
 		/*
 		let diagnosticsDetails = ""
-		const diagnostics = await this.diagnosticsMonitor.getCurrentDiagnostics(this.didEditFile || terminalWasBusy) // if cline ran a command (ie npm install) or edited the workspace then wait a bit for updated diagnostics
+		const diagnostics = await this.diagnosticsMonitor.getCurrentDiagnostics(this.didEditFile || terminalWasBusy) // if bluesaicoder ran a command (ie npm install) or edited the workspace then wait a bit for updated diagnostics
 		for (const [uri, fileDiagnostics] of diagnostics) {
 			const problems = fileDiagnostics.filter((d) => d.severity === vscode.DiagnosticSeverity.Error)
 			if (problems.length > 0) {

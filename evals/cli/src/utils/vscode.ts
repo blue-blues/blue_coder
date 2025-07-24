@@ -16,7 +16,7 @@ interface VSCodeResources {
 const workspaceResources = new Map<string, VSCodeResources>()
 
 /**
- * Spawn a VSCode instance with the Cline extension
+ * Spawn a VSCode instance with the BluesAICoder extension
  * @param workspacePath The workspace path to open
  * @param vsixPath Optional path to a VSIX file to install
  * @returns The resources created for this VS Code instance
@@ -32,20 +32,20 @@ export async function spawnVSCode(workspacePath: string, vsixPath?: string): Pro
 		try {
 			// Build the VSIX (no longer need to set IS_TEST=true as we'll use evals.env file)
 			console.log("Building VSIX...")
-			const clineRoot = path.resolve(process.cwd(), "..", "..")
+			const bluesaicoderRoot = path.resolve(process.cwd(), "..", "..")
 			await execa("npx", ["vsce", "package"], {
-				cwd: clineRoot,
+				cwd: bluesaicoderRoot,
 				stdio: "inherit",
 			})
 
 			// Find the generated VSIX file(s)
-			const files = fs.readdirSync(clineRoot)
+			const files = fs.readdirSync(bluesaicoderRoot)
 			const vsixFiles = files.filter((file) => file.endsWith(".vsix"))
 
 			if (vsixFiles.length > 0) {
 				// Get file stats to find the most recent one
 				const vsixFilesWithStats = vsixFiles.map((file) => {
-					const filePath = path.join(clineRoot, file)
+					const filePath = path.join(bluesaicoderRoot, file)
 					return {
 						file,
 						path: filePath,
@@ -76,12 +76,12 @@ export async function spawnVSCode(workspacePath: string, vsixPath?: string): Pro
 	}
 
 	// Create a temporary user data directory for this VS Code instance
-	const tempUserDataDir = path.join(os.tmpdir(), `vscode-cline-eval-${Date.now()}`)
+	const tempUserDataDir = path.join(os.tmpdir(), `vscode-bluesaicoder-eval-${Date.now()}`)
 	fs.mkdirSync(tempUserDataDir, { recursive: true })
 	console.log(`Created temporary user data directory: ${tempUserDataDir}`)
 
 	// Create a temporary extensions directory to ensure no other extensions are loaded
-	const tempExtensionsDir = path.join(os.tmpdir(), `vscode-cline-eval-ext-${Date.now()}`)
+	const tempExtensionsDir = path.join(os.tmpdir(), `vscode-bluesaicoder-eval-ext-${Date.now()}`)
 	fs.mkdirSync(tempExtensionsDir, { recursive: true })
 	console.log(`Created temporary extensions directory: ${tempExtensionsDir}`)
 
@@ -90,10 +90,10 @@ export async function spawnVSCode(workspacePath: string, vsixPath?: string): Pro
 	const evalsEnvPath = path.join(workspacePath, "evals.env")
 	fs.writeFileSync(
 		evalsEnvPath,
-		`# This file activates Cline test mode
+		`# This file activates BluesAICoder test mode
 # Created at: ${new Date().toISOString()}
 # 
-# This file is automatically detected by the Cline extension
+# This file is automatically detected by the BluesAICoder extension
 # and enables test mode for automated evaluations.
 #
 # Delete this file to deactivate test mode.
@@ -101,7 +101,7 @@ export async function spawnVSCode(workspacePath: string, vsixPath?: string): Pro
 	)
 
 	// Create settings.json in the temporary user data directory to disable workspace trust
-	// and configure Cline to auto-open on startup
+	// and configure BluesAICoder to auto-open on startup
 	const settingsDir = path.join(tempUserDataDir, "User")
 	fs.mkdirSync(settingsDir, { recursive: true })
 	const settingsPath = path.join(settingsDir, "settings.json")
@@ -115,8 +115,8 @@ export async function spawnVSCode(workspacePath: string, vsixPath?: string): Pro
 		// Configure startup behavior
 		"workbench.startupEditor": "none",
 
-		// Auto-open Cline on startup
-		"cline.autoOpenOnStartup": true,
+		// Auto-open BluesAICoder on startup
+		"bluesaicoder.autoOpenOnStartup": true,
 
 		// Show the activity bar and sidebar
 		"workbench.activityBar.visible": true,
@@ -138,9 +138,9 @@ export async function spawnVSCode(workspacePath: string, vsixPath?: string): Pro
 		"extensions.autoUpdate": false,
 	}
 	fs.writeFileSync(settingsPath, JSON.stringify(settings, null, 2))
-	console.log(`Created settings.json to disable workspace trust and auto-open Cline`)
+	console.log(`Created settings.json to disable workspace trust and auto-open BluesAICoder`)
 
-	// Create keybindings.json to automatically open Cline on startup
+	// Create keybindings.json to automatically open BluesAICoder on startup
 	const keybindingsPath = path.join(settingsDir, "keybindings.json")
 	const keybindings = [
 		{
@@ -150,12 +150,12 @@ export async function spawnVSCode(workspacePath: string, vsixPath?: string): Pro
 		},
 		{
 			key: "alt+shift+c",
-			command: "cline.openInNewTab",
+			command: "bluesaicoder.openInNewTab",
 			when: "viewContainer.workbench.view.extension.saoudrizwan.blues-ai-coder-ActivityBar.enabled",
 		},
 	]
 	fs.writeFileSync(keybindingsPath, JSON.stringify(keybindings, null, 2))
-	console.log(`Created keybindings.json to help with Cline activation`)
+	console.log(`Created keybindings.json to help with BluesAICoder activation`)
 
 	// Build the command arguments with custom user data directory
 	const args = [
@@ -172,7 +172,7 @@ export async function spawnVSCode(workspacePath: string, vsixPath?: string): Pro
 		// Force the extension to be activated on startup
 		"--start-up-extension",
 		"saoudrizwan.blues-ai-coder",
-		// Run a command on startup to open Cline
+		// Run a command on startup to open BluesAICoder
 		"--command",
 		"workbench.view.extension.saoudrizwan.blues-ai-coder-ActivityBar",
 		// Additional flags to help with extension activation
@@ -185,17 +185,17 @@ export async function spawnVSCode(workspacePath: string, vsixPath?: string): Pro
 	const startupScript = `
 		// This script will be executed when VS Code starts
 		setTimeout(() => {
-			// Try to open Cline in the sidebar
+			// Try to open BluesAICoder in the sidebar
 			require('vscode').commands.executeCommand('workbench.view.extension.saoudrizwan.blues-ai-coder-ActivityBar');
 			
-			// Also try to open Cline in a tab as a fallback
+			// Also try to open BluesAICoder in a tab as a fallback
 			setTimeout(() => {
-				require('vscode').commands.executeCommand('cline.openInNewTab');
+				require('vscode').commands.executeCommand('bluesaicoder.openInNewTab');
 			}, 5000);
 		}, 5000);
 	`
 	fs.writeFileSync(startupScriptPath, startupScript)
-	console.log(`Created startup script to activate Cline`)
+	console.log(`Created startup script to activate BluesAICoder`)
 
 	// If a VSIX is provided, install it
 	if (vsixPath) {
@@ -229,15 +229,15 @@ export async function spawnVSCode(workspacePath: string, vsixPath?: string): Pro
 		await new Promise((resolve) => setTimeout(resolve, 30000))
 
 		// Create a JavaScript file that will be loaded as a VS Code extension
-		const extensionDir = path.join(tempExtensionsDir, "cline-activator")
+		const extensionDir = path.join(tempExtensionsDir, "bluesaicoder-activator")
 		fs.mkdirSync(extensionDir, { recursive: true })
 
 		// Create package.json for the extension
 		const packageJsonPath = path.join(extensionDir, "package.json")
 		const packageJson = {
-			name: "cline-activator",
-			displayName: "Cline Activator",
-			description: "Activates Cline and starts the test server",
+			name: "bluesaicoder-activator",
+			displayName: "BluesAICoder Activator",
+			description: "Activates BluesAICoder and starts the test server",
 			version: "0.0.1",
 			engines: {
 				vscode: "^1.60.0",
@@ -247,8 +247,8 @@ export async function spawnVSCode(workspacePath: string, vsixPath?: string): Pro
 			contributes: {
 				commands: [
 					{
-						command: "cline-activator.activate",
-						title: "Activate Cline",
+						command: "bluesaicoder-activator.activate",
+						title: "Activate BluesAICoder",
 					},
 				],
 			},
@@ -264,33 +264,33 @@ export async function spawnVSCode(workspacePath: string, vsixPath?: string): Pro
 			 * @param {vscode.ExtensionContext} context
 			 */
 			function activate(context) {
-				console.log('Cline Activator is now active!');
+				console.log('BluesAICoder Activator is now active!');
 				
-				// Register the command to activate Cline
-				let disposable = vscode.commands.registerCommand('cline-activator.activate', async function () {
+				// Register the command to activate BluesAICoder
+				let disposable = vscode.commands.registerCommand('bluesaicoder-activator.activate', async function () {
 					try {
-						// Make sure the Cline extension is activated
+						// Make sure the BluesAICoder extension is activated
 						const extension = vscode.extensions.getExtension('saoudrizwan.blues-ai-coder');
 						if (!extension) {
-							console.error('Cline extension not found');
+							console.error('BluesAICoder extension not found');
 							return;
 						}
 						
 						if (!extension.isActive) {
-							console.log('Activating Cline extension...');
+							console.log('Activating BluesAICoder extension...');
 							await extension.activate();
 						}
 						
-						// Show the Cline sidebar
-						console.log('Opening Cline sidebar...');
+						// Show the BluesAICoder sidebar
+						console.log('Opening BluesAICoder sidebar...');
 						await vscode.commands.executeCommand('workbench.view.extension.saoudrizwan.blues-ai-coder-ActivityBar');
 						
 						// Wait a moment for the sidebar to initialize
 						await new Promise(resolve => setTimeout(resolve, 2000));
 						
-						// Also open Cline in a tab as a fallback
-						console.log('Opening Cline in a tab...');
-						await vscode.commands.executeCommand('cline.openInNewTab');
+						// Also open BluesAICoder in a tab as a fallback
+						console.log('Opening BluesAICoder in a tab...');
+						await vscode.commands.executeCommand('bluesaicoder.openInNewTab');
 						
 						// Wait a moment for the tab to initialize
 						await new Promise(resolve => setTimeout(resolve, 2000));
@@ -299,16 +299,16 @@ export async function spawnVSCode(workspacePath: string, vsixPath?: string): Pro
 						console.log('Creating test server...');
 						
 						// Get the visible webview instance
-						const clineRootPath = '${path.resolve(process.cwd(), "..", "..")}';
-						const visibleWebview = require(path.join(clineRootPath, 'src', 'core', 'webview')).WebviewProvider.getVisibleInstance();
+						const bluesaicoderRootPath = '${path.resolve(process.cwd(), "..", "..")}';
+						const visibleWebview = require(path.join(bluesaicoderRootPath, 'src', 'core', 'webview')).WebviewProvider.getVisibleInstance();
 						if (visibleWebview) {
-							require(path.join(clineRootPath, 'src', 'services', 'test', 'TestServer')).createTestServer(visibleWebview);
+							require(path.join(bluesaicoderRootPath, 'src', 'services', 'test', 'TestServer')).createTestServer(visibleWebview);
 							console.log('Test server created successfully');
 						} else {
 							console.error('No visible webview instance found');
 						}
 					} catch (error) {
-						console.error('Error activating Cline:', error);
+						console.error('Error activating BluesAICoder:', error);
 					}
 				});
 				
@@ -316,7 +316,7 @@ export async function spawnVSCode(workspacePath: string, vsixPath?: string): Pro
 				
 				// Automatically run the command after a delay
 				setTimeout(() => {
-					vscode.commands.executeCommand('cline-activator.activate');
+					vscode.commands.executeCommand('bluesaicoder-activator.activate');
 				}, 5000);
 			}
 			
@@ -328,26 +328,26 @@ export async function spawnVSCode(workspacePath: string, vsixPath?: string): Pro
 			}
 		`
 		fs.writeFileSync(extensionJsPath, extensionJs)
-		console.log(`Created Cline Activator extension`)
+		console.log(`Created BluesAICoder Activator extension`)
 
 		// Try multiple approaches to activate the extension
 		let serverStarted = false
 
 		// Create an activation script to run in VS Code
-		const activationScriptPath = path.join(settingsDir, "activate-cline.js")
+		const activationScriptPath = path.join(settingsDir, "activate-bluesaicoder.js")
 		const activationScript = `
-			// This script will be executed to activate Cline and start the test server
+			// This script will be executed to activate BluesAICoder and start the test server
 			const vscode = require('vscode');
 			
-			// Execute the cline-activator.activate command
-			vscode.commands.executeCommand('cline-activator.activate');
+			// Execute the bluesaicoder-activator.activate command
+			vscode.commands.executeCommand('bluesaicoder-activator.activate');
 		`
 		fs.writeFileSync(activationScriptPath, activationScript)
 		console.log(`Created activation script to run in VS Code`)
 
 		// Execute the activation script
 		try {
-			console.log("Executing activation script to start Cline and test server...")
+			console.log("Executing activation script to start BluesAICoder and test server...")
 			await execa(
 				"code",
 				[
@@ -393,7 +393,7 @@ export async function spawnVSCode(workspacePath: string, vsixPath?: string): Pro
 
 		if (!serverStarted) {
 			console.warn("Test server did not start after multiple attempts")
-			console.log("You may need to manually open the Cline extension in VS Code")
+			console.log("You may need to manually open the BluesAICoder extension in VS Code")
 		}
 
 		// Store the resources for this workspace

@@ -1,11 +1,11 @@
 <div align="center"><sub>
-<a href="https://github.com/cline/cline/blob/main/README.md" target="_blank">English</a> | <a href="https://github.com/cline/cline/blob/main/locales/es/README.md" target="_blank">Español</a> | <a href="https://github.com/cline/cline/blob/main/locales/de/README.md" target="_blank">Deutsch</a> | <a href="https://github.com/cline/cline/blob/main/locales/ja/README.md" target="_blank">日本語</a> | <a href="https://github.com/cline/cline/blob/main/locales/zh-cn/README.md" target="_blank">简体中文</a> | 繁體中文 | <a href="https://github.com/cline/cline/blob/main/locales/ko/README.md" target="_blank">한국어</a>
+<a href="https://github.com/bluesaicoder/bluesaicoder/blob/main/README.md" target="_blank">English</a> | <a href="https://github.com/bluesaicoder/bluesaicoder/blob/main/locales/es/README.md" target="_blank">Español</a> | <a href="https://github.com/bluesaicoder/bluesaicoder/blob/main/locales/de/README.md" target="_blank">Deutsch</a> | <a href="https://github.com/bluesaicoder/bluesaicoder/blob/main/locales/ja/README.md" target="_blank">日本語</a> | <a href="https://github.com/bluesaicoder/bluesaicoder/blob/main/locales/zh-cn/README.md" target="_blank">简体中文</a> | 繁體中文 | <a href="https://github.com/bluesaicoder/bluesaicoder/blob/main/locales/ko/README.md" target="_blank">한국어</a>
 </sub></div>
 
 # Cline
 
 <p align="center">
-    <img src="https://media.githubusercontent.com/media/cline/cline/main/assets/docs/demo.gif" width="100%" />
+    <img src="https://media.githubusercontent.com/media/bluesaicoder/bluesaicoder/main/assets/docs/demo.gif" width="100%" />
 </p>
 
 <div align="center">
@@ -15,16 +15,16 @@
 <a href="https://marketplace.visualstudio.com/items?itemName=saoudrizwan.claude-dev" target="_blank"><strong>從 VS Marketplace 下載</strong></a>
 </td>
 <td align="center">
-<a href="https://discord.gg/cline" target="_blank"><strong>Discord</strong></a>
+<a href="https://discord.gg/bluesaicoder" target="_blank"><strong>Discord</strong></a>
 </td>
 <td align="center">
-<a href="https://www.reddit.com/r/cline/" target="_blank"><strong>r/cline</strong></a>
+<a href="https://www.reddit.com/r/bluesaicoder/" target="_blank"><strong>r/bluesaicoder</strong></a>
 </td>
 <td align="center">
-<a href="https://github.com/cline/cline/discussions/categories/feature-requests?discussions_q=is%3Aopen+category%3A%22Feature+Requests%22+sort%3Atop" target="_blank"><strong>功能建議</strong></a>
+<a href="https://github.com/bluesaicoder/bluesaicoder/discussions/categories/feature-requests?discussions_q=is%3Aopen+category%3A%22Feature+Requests%22+sort%3Atop" target="_blank"><strong>功能建議</strong></a>
 </td>
 <td align="center">
-<a href="https://docs.cline.bot/getting-started/getting-started-new-coders" target="_blank"><strong>新手上路</strong></a>
+<a href="https://docs.bluesaicoder.bot/getting-started/getting-started-new-coders" target="_blank"><strong>新手上路</strong></a>
 </td>
 </tbody>
 </table>
@@ -132,7 +132,7 @@ Cline 可以直接在您的編輯器中建立和編輯檔案，並顯示變更�
 
 ## 貢獻
 
-要為專案貢獻，請先閱讀我們的[貢獻指南](CONTRIBUTING.md)來了解基礎知識。您也可以加入我們的 [Discord](https://discord.gg/cline)，在 `#contributors` 頻道與其他貢獻者交流。如果您在尋找全職工作，請檢視我們[職涯頁面](https://cline.bot/join-us)上的職缺！
+要為專案貢獻，請先閱讀我們的[貢獻指南](CONTRIBUTING.md)來了解基礎知識。您也可以加入我們的 [Discord](https://discord.gg/bluesaicoder)，在 `#contributors` 頻道與其他貢獻者交流。如果您在尋找全職工作，請檢視我們[職涯頁面](https://bluesaicoder.bot/join-us)上的職缺！
 
 <details>
 <summary>本機開發說明</summary>
@@ -140,13 +140,13 @@ Cline 可以直接在您的編輯器中建立和編輯檔案，並顯示變更�
 1. 複製程式碼庫（需要 [git-lfs](https://git-lfs.com/)）：
 
     ```bash
-    git clone https://github.com/cline/cline.git
+    git clone https://github.com/bluesaicoder/bluesaicoder.git
     ```
 
 2. 在 VSCode 中開啟專案：
 
     ```bash
-    code cline
+    code bluesaicoder
     ```
 
 3. 安裝擴充套件和網頁介面所需的相依套件：

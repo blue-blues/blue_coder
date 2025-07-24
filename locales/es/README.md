@@ -1,7 +1,7 @@
 # Cline
 
 <p align="center">
-        <img src="https://media.githubusercontent.com/media/cline/cline/main/assets/docs/demo.gif" width="100%" />
+        <img src="https://media.githubusercontent.com/media/bluesaicoder/bluesaicoder/main/assets/docs/demo.gif" width="100%" />
 </p>
 
 <div align="center">
@@ -11,16 +11,16 @@
 <a href="https://marketplace.visualstudio.com/items?itemName=saoudrizwan.claude-dev" target="_blank"><strong>Descargar en VS Marketplace</strong></a>
 </td>
 <td align="center">
-<a href="https://discord.gg/cline" target="_blank"><strong>Discord</strong></a>
+<a href="https://discord.gg/bluesaicoder" target="_blank"><strong>Discord</strong></a>
 </td>
 <td align="center">
-<a href="https://www.reddit.com/r/cline/" target="_blank"><strong>r/cline</strong></a>
+<a href="https://www.reddit.com/r/bluesaicoder/" target="_blank"><strong>r/bluesaicoder</strong></a>
 </td>
 <td align="center">
-<a href="https://github.com/cline/cline/discussions/categories/feature-requests?discussions_q=is%3Aopen+category%3A%22Feature+Requests%22+sort%3Atop" target="_blank"><strong>Solicitudes de Funciones</strong></a>
+<a href="https://github.com/bluesaicoder/bluesaicoder/discussions/categories/feature-requests?discussions_q=is%3Aopen+category%3A%22Feature+Requests%22+sort%3Atop" target="_blank"><strong>Solicitudes de Funciones</strong></a>
 </td>
 <td align="center">
-<a href="https://cline.bot/join-us" target="_blank"><strong>Estamos Contratando!</strong></a>
+<a href="https://bluesaicoder.bot/join-us" target="_blank"><strong>Estamos Contratando!</strong></a>
 </td>
 </tbody>
 </table>
@@ -135,18 +135,18 @@ Por ejemplo, si está trabajando con un servidor web local, puede usar 'Restaura
 
 ## Contribuir
 
-Para contribuir al proyecto, comience con nuestra [guía de contribución](CONTRIBUTING.md) para aprender los conceptos básicos. También puede unirse a nuestro [Discord](https://discord.gg/cline) para chatear con otros colaboradores en el canal `#contributors`. Si está buscando un trabajo a tiempo completo, consulte nuestras vacantes en nuestra [página de carreras](https://cline.bot/join-us).
+Para contribuir al proyecto, comience con nuestra [guía de contribución](CONTRIBUTING.md) para aprender los conceptos básicos. También puede unirse a nuestro [Discord](https://discord.gg/bluesaicoder) para chatear con otros colaboradores en el canal `#contributors`. Si está buscando un trabajo a tiempo completo, consulte nuestras vacantes en nuestra [página de carreras](https://bluesaicoder.bot/join-us).
 
 <details>
 <summary>Instrucciones de desarrollo local</summary>
 
 1. Clone el repositorio _(Requiere [git-lfs](https://git-lfs.com/))_:
                 ```bash
-                git clone https://github.com/cline/cline.git
+                git clone https://github.com/bluesaicoder/bluesaicoder.git
                 ```
 2. Abra el proyecto en VSCode:
                 ```bash
-                code cline
+                code bluesaicoder
                 ```
 3. Instale las dependencias necesarias para la extensión y la GUI de Webview:
                 ```bash

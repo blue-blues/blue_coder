@@ -2,36 +2,36 @@
 
 The Cline extension exposes an API that can be used by other extensions. To use this API in your extension:
 
-1. Copy `src/extension-api/cline.d.ts` to your extension's source directory.
-2. Include `cline.d.ts` in your extension's compilation.
+1. Copy `src/extension-api/bluesaicoder.d.ts` to your extension's source directory.
+2. Include `bluesaicoder.d.ts` in your extension's compilation.
 3. Get access to the API with the following code:
 
     ```ts
-    const clineExtension = vscode.extensions.getExtension<ClineAPI>("saoudrizwan.claude-dev")
+    const bluesaicoderExtension = vscode.extensions.getExtension<ClineAPI>("saoudrizwan.claude-dev")
 
-    if (!clineExtension?.isActive) {
+    if (!bluesaicoderExtension?.isActive) {
     	throw new Error("Cline extension is not activated")
     }
 
-    const cline = clineExtension.exports
+    const bluesaicoder = bluesaicoderExtension.exports
 
-    if (cline) {
+    if (bluesaicoder) {
     	// Now you can use the API
 
     	// Start a new task with an initial message
-    	await cline.startNewTask("Hello, Cline! Let's make a new project...")
+    	await bluesaicoder.startNewTask("Hello, Cline! Let's make a new project...")
 
     	// Start a new task with an initial message and images
-    	await cline.startNewTask("Use this design language", ["data:image/webp;base64,..."])
+    	await bluesaicoder.startNewTask("Use this design language", ["data:image/webp;base64,..."])
 
     	// Send a message to the current task
-    	await cline.sendMessage("Can you fix the @problems?")
+    	await bluesaicoder.sendMessage("Can you fix the @problems?")
 
     	// Simulate pressing the primary button in the chat interface (e.g. 'Save' or 'Proceed While Running')
-    	await cline.pressPrimaryButton()
+    	await bluesaicoder.pressPrimaryButton()
 
     	// Simulate pressing the secondary button in the chat interface (e.g. 'Reject')
-    	await cline.pressSecondaryButton()
+    	await bluesaicoder.pressSecondaryButton()
     } else {
     	console.error("Cline API is not available")
     }
@@ -45,4 +45,4 @@ The Cline extension exposes an API that can be used by other extensions. To use 
     ]
     ```
 
-For detailed information on the available methods and their usage, refer to the `cline.d.ts` file.
+For detailed information on the available methods and their usage, refer to the `bluesaicoder.d.ts` file.

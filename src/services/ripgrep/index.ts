@@ -173,7 +173,7 @@ export async function regexSearchFiles(
 		results.push(currentResult as SearchResult)
 	}
 
-	// Filter results using ClineIgnoreController if provided
+	// Filter results using BluesAICoderIgnoreController if provided
 	const filteredResults = bluesAICoderIgnoreController
 		? results.filter((result) => bluesAICoderIgnoreController.validateAccess(result.filePath))
 		: results

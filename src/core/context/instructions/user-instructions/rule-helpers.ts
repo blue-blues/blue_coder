@@ -105,7 +105,10 @@ export async function synchronizeRuleToggles(
 /**
  * Certain project rules have more than a single location where rules are allowed to be stored
  */
-export function combineRuleToggles(toggles1: BluesAICoderRulesToggles, toggles2: BluesAICoderRulesToggles): BluesAICoderRulesToggles {
+export function combineRuleToggles(
+	toggles1: BluesAICoderRulesToggles,
+	toggles2: BluesAICoderRulesToggles,
+): BluesAICoderRulesToggles {
 	return { ...toggles1, ...toggles2 }
 }
 
@@ -129,12 +132,15 @@ export const getRuleFilesTotalContent = async (rulesFilePaths: string[], basePat
 }
 
 /**
- * Handles converting any directory into a file (specifically used for .clinerules and .clinerules/workflows)
- * The old .clinerules file or .clinerules/workflows file will be renamed to a default filename
+ * Handles converting any directory into a file (specifically used for .bluesaicoderrules and .bluesaicoderrules/workflows)
+ * The old .bluesaicoderrules file or .bluesaicoderrules/workflows file will be renamed to a default filename
  * Doesn't do anything if the dir already exists or doesn't exist
  * Returns whether there are any uncaught errors
  */
-export async function ensureLocalBluesAICoderDirExists(bluesaicoterulePath: string, defaultRuleFilename: string): Promise<boolean> {
+export async function ensureLocalBluesAICoderDirExists(
+	bluesaicoterulePath: string,
+	defaultRuleFilename: string,
+): Promise<boolean> {
 	try {
 		const exists = await fileExistsAtPath(bluesaicoterulePath)
 
@@ -267,7 +273,8 @@ export async function deleteRuleFile(
 				delete toggles[rulePath]
 				await updateWorkspaceState(context, "localCursorRulesToggles", toggles)
 			} else if (type === "windsurf") {
-				const toggles = ((await getWorkspaceState(context, "localWindsurfRulesToggles")) as BluesAICoderRulesToggles) || {}
+				const toggles =
+					((await getWorkspaceState(context, "localWindsurfRulesToggles")) as BluesAICoderRulesToggles) || {}
 				delete toggles[rulePath]
 				await updateWorkspaceState(context, "localWindsurfRulesToggles", toggles)
 			} else {

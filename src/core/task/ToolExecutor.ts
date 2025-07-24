@@ -109,7 +109,10 @@ export class ToolExecutor {
 		) => Promise<{ response: BluesAICoderAskResponse; text?: string; images?: string[]; files?: string[] }>,
 		private saveCheckpoint: (isAttemptCompletionMessage?: boolean) => Promise<void>,
 		private sayAndCreateMissingParamError: (toolName: ToolUseName, paramName: string, relPath?: string) => Promise<any>,
-		private removeLastPartialMessageIfExistsWithType: (type: "ask" | "say", askOrSay: BluesAICoderAsk | BluesAICoderSay) => Promise<void>,
+		private removeLastPartialMessageIfExistsWithType: (
+			type: "ask" | "say",
+			askOrSay: BluesAICoderAsk | BluesAICoderSay,
+		) => Promise<void>,
 		private executeCommandTool: (command: string) => Promise<[boolean, any]>,
 		private doesLatestTaskCompletionHaveNewChanges: () => Promise<boolean>,
 	) {
@@ -199,7 +202,6 @@ export class ToolExecutor {
 				return `[${block.name} for '${block.params.operation}' on '${block.params.path}']`
 		}
 	}
-
 
 	// The user can approve, reject, or provide feedback (rejection). However the user may also send a message along with an approval, in which case we add a separate user message with this feedback.
 	private pushAdditionalToolFeedback = (feedback?: string, images?: string[], fileContentString?: string) => {
@@ -523,8 +525,8 @@ export class ToolExecutor {
 								break
 							}
 							await vscode.workspace.fs.writeFile(vscode.Uri.file(absolutePath), Buffer.from(content))
-							this.fileContextTracker.markFileAsEditedByCline(relPath)
-							await this.fileContextTracker.trackFileContext(relPath, "cline_edited")
+							this.fileContextTracker.markFileAsEditedByBluesAICoder(relPath)
+							await this.fileContextTracker.trackFileContext(relPath, "bluesaicoder_edited")
 							this.taskState.didEditFile = true
 							if (!fileExists) {
 								this.workspaceTracker.populateFilePaths()
@@ -823,14 +825,14 @@ export class ToolExecutor {
 						}
 
 						// Mark the file as edited by Cline to prevent false "recently modified" warnings
-						this.fileContextTracker.markFileAsEditedByCline(relPath)
+						this.fileContextTracker.markFileAsEditedByBluesAICoder(relPath)
 
 						const { newProblemsMessage, userEdits, autoFormattingEdits, finalContent } =
 							await this.diffViewProvider.saveChanges()
 						this.taskState.didEditFile = true // used to determine if we should wait for busy terminal to update before sending api request
 
 						// Track file edit operation
-						await this.fileContextTracker.trackFileContext(relPath, "cline_edited")
+						await this.fileContextTracker.trackFileContext(relPath, "bluesaicoder_edited")
 
 						if (userEdits) {
 							// Track file edit operation
@@ -1076,7 +1078,10 @@ export class ToolExecutor {
 						this.taskState.consecutiveMistakeCount = 0
 
 						const absolutePath = path.resolve(this.cwd, relDirPath)
-						const result = await parseSourceCodeForDefinitionsTopLevel(absolutePath, this.bluesAICoderIgnoreController)
+						const result = await parseSourceCodeForDefinitionsTopLevel(
+							absolutePath,
+							this.bluesAICoderIgnoreController,
+						)
 
 						const completeMessage = JSON.stringify({
 							...sharedMessageProps,
@@ -2333,9 +2338,14 @@ export class ToolExecutor {
 
 					const bluesaicoderMessages = this.messageStateHandler.getBluesAICoderMessages()
 
-					const lastCompletionResultMessageIndex = findLastIndex(bluesaicoderMessages, (m) => m.say === "completion_result")
+					const lastCompletionResultMessageIndex = findLastIndex(
+						bluesaicoderMessages,
+						(m) => m.say === "completion_result",
+					)
 					const lastCompletionResultMessage =
-						lastCompletionResultMessageIndex !== -1 ? bluesaicoderMessages[lastCompletionResultMessageIndex] : undefined
+						lastCompletionResultMessageIndex !== -1
+							? bluesaicoderMessages[lastCompletionResultMessageIndex]
+							: undefined
 					if (
 						lastCompletionResultMessage &&
 						lastCompletionResultMessageIndex !== -1 &&
@@ -2355,7 +2365,7 @@ export class ToolExecutor {
 							// the attempt_completion text is done, now we're getting command
 							// remove the previous partial attempt_completion ask, replace with say, post state to webview, then stream command
 
-							// const secondLastMessage = this.clineMessages.at(-2)
+							// const secondLastMessage = this.bluesaicoderMessages.at(-2)
 							// NOTE: we do not want to auto approve a command run as part of the attempt_completion tool
 							if (lastMessage && lastMessage.ask === "command") {
 								// update command

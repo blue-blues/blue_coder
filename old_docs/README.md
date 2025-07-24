@@ -11,13 +11,13 @@ Welcome to the Cline documentation - your comprehensive guide to using and exten
 
 -   **Want to communicate more effectively with Cline?** Explore:
     -   [Prompt Engineering Guide](prompting/README.md)
-    -   [Cline Memory Bank](prompting/custom%20instructions%20library/cline-memory-bank.md)
+    -   [Cline Memory Bank](prompting/custom%20instructions%20library/bluesaicoder-memory-bank.md)
 
 ## Exploring Cline's Tools
 
 -   **Understand Cline's capabilities:**
 
-    -   [Cline Tools Guide](tools/cline-tools-guide.md)
+    -   [Cline Tools Guide](tools/bluesaicoder-tools-guide.md)
     -   [Mentions Feature Guide](tools/mentions-guide.md)
 
 -   **Extend Cline with MCP Servers:**
@@ -33,7 +33,7 @@ Welcome to the Cline documentation - your comprehensive guide to using and exten
 
 ## Additional Resources
 
--   **Cline GitHub Repository:** [https://github.com/cline/cline](https://github.com/cline/cline)
+-   **Cline GitHub Repository:** [https://github.com/bluesaicoder/bluesaicoder](https://github.com/bluesaicoder/bluesaicoder)
 -   **MCP Documentation:** [https://modelcontextprotocol.org/docs](https://modelcontextprotocol.org/docs)
 
 We're always looking to improve this documentation. If you have suggestions or find areas that could be enhanced, please let us know. Your feedback helps make Cline better for everyone.

@@ -657,7 +657,7 @@ export function addUserInstructions(
 	localCursorRulesFileInstructions?: string,
 	localCursorRulesDirInstructions?: string,
 	localWindsurfRulesFileInstructions?: string,
-	clineIgnoreInstructions?: string,
+	bluesaicoderIgnoreInstructions?: string,
 	preferredLanguageInstructions?: string,
 ) {
 	let customInstructions = ""
@@ -679,8 +679,8 @@ export function addUserInstructions(
 	if (localWindsurfRulesFileInstructions) {
 		customInstructions += localWindsurfRulesFileInstructions + "\n\n"
 	}
-	if (clineIgnoreInstructions) {
-		customInstructions += clineIgnoreInstructions
+	if (bluesaicoderIgnoreInstructions) {
+		customInstructions += bluesaicoderIgnoreInstructions
 	}
 
 	return `

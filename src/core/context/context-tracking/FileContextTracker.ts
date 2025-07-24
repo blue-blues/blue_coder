@@ -29,7 +29,7 @@ export class FileContextTracker {
 	// File tracking and watching
 	private fileWatchers = new Map<string, vscode.FileSystemWatcher>()
 	private recentlyModifiedFiles = new Set<string>()
-	private recentlyEditedByCline = new Set<string>()
+	private recentlyEditedByBluesAICoder = new Set<string>()
 
 	constructor(context: vscode.ExtensionContext, taskId: string) {
 		this.context = context
@@ -59,8 +59,8 @@ export class FileContextTracker {
 
 		// Track file changes
 		watcher.onDidChange(() => {
-			if (this.recentlyEditedByCline.has(filePath)) {
-				this.recentlyEditedByCline.delete(filePath) // This was an edit by Cline, no need to inform Cline
+			if (this.recentlyEditedByBluesAICoder.has(filePath)) {
+				this.recentlyEditedByBluesAICoder.delete(filePath) // This was an edit by BluesAICoder, no need to inform BluesAICoder
 			} else {
 				this.recentlyModifiedFiles.add(filePath) // This was a user edit, we will inform Cline
 				this.trackFileContext(filePath, "user_edited") // Update the task metadata with file tracking
@@ -75,7 +75,7 @@ export class FileContextTracker {
 	 * Tracks a file operation in metadata and sets up a watcher for the file
 	 * This is the main entry point for FileContextTracker and is called when a file is passed to Cline via a tool, mention, or edit.
 	 */
-	async trackFileContext(filePath: string, operation: "read_tool" | "user_edited" | "cline_edited" | "file_mentioned") {
+	async trackFileContext(filePath: string, operation: "read_tool" | "user_edited" | "bluesaicoder_edited" | "file_mentioned") {
 		try {
 			const cwd = await getCwd()
 			if (!cwd) {
@@ -128,8 +128,8 @@ export class FileContextTracker {
 				path: filePath,
 				record_state: "active",
 				record_source: source,
-				cline_read_date: getLatestDateForField(filePath, "cline_read_date"),
-				cline_edit_date: getLatestDateForField(filePath, "cline_edit_date"),
+				bluesaicoder_read_date: getLatestDateForField(filePath, "bluesaicoder_read_date"),
+				bluesaicoder_edit_date: getLatestDateForField(filePath, "bluesaicoder_edit_date"),
 				user_edit_date: getLatestDateForField(filePath, "user_edit_date"),
 			}
 
@@ -140,16 +140,16 @@ export class FileContextTracker {
 					this.recentlyModifiedFiles.add(filePath)
 					break
 
-				// cline_edited: Cline has edited the file
-				case "cline_edited":
-					newEntry.cline_read_date = now
-					newEntry.cline_edit_date = now
+				// bluesaicoder_edited: BluesAICoder has edited the file
+				case "bluesaicoder_edited":
+					newEntry.bluesaicoder_read_date = now
+					newEntry.bluesaicoder_edit_date = now
 					break
 
 				// read_tool/file_mentioned: Cline has read the file via a tool or file mention
 				case "read_tool":
 				case "file_mentioned":
-					newEntry.cline_read_date = now
+					newEntry.bluesaicoder_read_date = now
 					break
 			}
 
@@ -172,8 +172,8 @@ export class FileContextTracker {
 	/**
 	 * Marks a file as edited by Cline to prevent false positives in file watchers
 	 */
-	markFileAsEditedByCline(filePath: string): void {
-		this.recentlyEditedByCline.add(filePath)
+	markFileAsEditedByBluesAICoder(filePath: string): void {
+		this.recentlyEditedByBluesAICoder.add(filePath)
 	}
 
 	/**
@@ -199,10 +199,11 @@ export class FileContextTracker {
 
 			if (taskMetadata?.files_in_context) {
 				for (const fileEntry of taskMetadata.files_in_context) {
-					const clineEditedAfter = fileEntry.cline_edit_date && fileEntry.cline_edit_date > messageTs
+					const bluesaicoderEditedAfter =
+						fileEntry.bluesaicoder_edit_date && fileEntry.bluesaicoder_edit_date > messageTs
 					const userEditedAfter = fileEntry.user_edit_date && fileEntry.user_edit_date > messageTs
 
-					if (clineEditedAfter || userEditedAfter) {
+					if (bluesaicoderEditedAfter || userEditedAfter) {
 						editedFiles.push(fileEntry.path)
 					}
 				}

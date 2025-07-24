@@ -333,7 +333,7 @@ class Task {
     await pWaitFor(() => this.controllerRef.deref()?.mcpHub?.isConnecting !== true)
 
     // 2. Manage context window
-    const previousRequest = this.clineMessages[previousApiReqIndex]
+    const previousRequest = this.bluesaicoderMessages[previousApiReqIndex]
     if (previousRequest?.text) {
       const { tokensIn, tokensOut } = JSON.parse(previousRequest.text || "{}")
       const totalTokens = (tokensIn || 0) + (tokensOut || 0)
@@ -431,7 +431,7 @@ The Task class provides robust task state management and resumption capabilities
 class Task {
   async resumeTaskFromHistory() {
     // 1. Load saved state
-    this.clineMessages = await getSavedClineMessages(this.getContext(), this.taskId)
+    this.bluesaicoderMessages = await getSavedClineMessages(this.getContext(), this.taskId)
     this.apiConversationHistory = await getSavedApiConversationHistory(this.getContext(), this.taskId)
 
     // 2. Handle interrupted tool executions
@@ -463,7 +463,7 @@ class Task {
   private async saveTaskState() {
     // Save conversation history
     await saveApiConversationHistory(this.getContext(), this.taskId, this.apiConversationHistory)
-    await saveClineMessages(this.getContext(), this.taskId, this.clineMessages)
+    await saveClineMessages(this.getContext(), this.taskId, this.bluesaicoderMessages)
     
     // Create checkpoint
     const commitHash = await this.checkpointTracker?.commit()
@@ -723,7 +723,7 @@ class Controller {
   async downloadMcp(mcpId: string) {
     // Fetch server details from marketplace
     const response = await axios.post<McpDownloadResponse>(
-      "https://api.cline.bot/v1/mcp/download",
+      "https://api.bluesaicoder.bot/v1/mcp/download",
       { mcpId },
       {
         headers: { "Content-Type": "application/json" },
@@ -761,4 +761,4 @@ Contributions to the Cline extension are welcome! Please follow these guidelines
 
 When adding new tools or API providers, follow the existing patterns in the `src/integrations/` and `src/api/providers/` directories, respectively. Ensure that your code is well-documented and includes appropriate error handling.
 
-The `.clineignore` file allows users to specify files and directories that Cline should not access. When implementing new features, respect the `.clineignore` rules and ensure that your code does not attempt to read or modify ignored files.
+The `.bluesaicoderignore` file allows users to specify files and directories that Cline should not access. When implementing new features, respect the `.bluesaicoderignore` rules and ensure that your code does not attempt to read or modify ignored files.

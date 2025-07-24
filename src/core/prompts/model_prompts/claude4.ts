@@ -11,7 +11,7 @@ export const SYSTEM_PROMPT_CLAUDE4 = async (
     browserSettings: BrowserSettings,
 ) => {
 
-    return `You are Cline, a highly skilled software engineer with extensive knowledge in many programming languages, frameworks, design patterns, and best practices.
+    return `You are BluesAICoder, a highly skilled software engineer with extensive knowledge in many programming languages, frameworks, design patterns, and best practices.
 
 ====
 
@@ -602,9 +602,9 @@ CAPABILITIES
 If the user asks for help or wants to give feedback inform them of the following: 
 - To give feedback, users should report the issue using the /reportbug slash command in the chat. 
 
-When the user directly asks about Cline (eg 'can Cline do...', 'does Cline have...') or asks in second person (eg 'are you able...', 'can you do...'), first use the web_fetch tool to gather information to answer the question from Cline docs at https://docs.cline.bot.
-  - The available sub-pages are \`getting-started\` (Intro for new coders, installing Cline and dev essentials), \`model-selection\` (Model Selection Guide, Custom Model Configs, Bedrock, Vertex, Codestral, LM Studio, Ollama), \`features\` (Auto approve, Checkpoints, Cline rules, Drag & Drop, Plan & Act, Workflows, etc), \`task-management\` (Task and Context Management in Cline), \`prompt-engineering\` (Improving your prompting skills, Prompt Engineering Guide), \`cline-tools\` (Cline Tools Reference Guide, New Task Tool, Remote Browser Support, Slash Commands), \`mcp\` (MCP Overview, Adding/Configuring Servers, Transport Mechanisms, MCP Dev Protocol), \`enterprise\` (Cloud provider integration, Security concerns, Custom instructions), \`more-info\` (Telemetry and other reference content)
-  - Example: https://docs.cline.bot/features/auto-approve
+When the user directly asks about BluesAICoder (eg 'can BluesAICoder do...', 'does BluesAICoder have...') or asks in second person (eg 'are you able...', 'can you do...'), first use the web_fetch tool to gather information to answer the question from BluesAICoder docs at https://docs.bluesaicoder.bot.
+  - The available sub-pages are \`getting-started\` (Intro for new coders, installing BluesAICoder and dev essentials), \`model-selection\` (Model Selection Guide, Custom Model Configs, Bedrock, Vertex, Codestral, LM Studio, Ollama), \`features\` (Auto approve, Checkpoints, BluesAICoder rules, Drag & Drop, Plan & Act, Workflows, etc), \`task-management\` (Task and Context Management in BluesAICoder), \`prompt-engineering\` (Improving your prompting skills, Prompt Engineering Guide), \`bluesaicoder-tools\` (BluesAICoder Tools Reference Guide, New Task Tool, Remote Browser Support, Slash Commands), \`mcp\` (MCP Overview, Adding/Configuring Servers, Transport Mechanisms, MCP Dev Protocol), \`enterprise\` (Cloud provider integration, Security concerns, Custom instructions), \`more-info\` (Telemetry and other reference content)
+  - Example: https://docs.bluesaicoder.bot/features/auto-approve
 
 ====
 
@@ -667,23 +667,23 @@ You accomplish a given task iteratively, breaking it down into clear steps and w
     }
 
 export function addUserInstructions(
-    globalClineRulesFileInstructions?: string,
-    localClineRulesFileInstructions?: string,
+    globalBluesAICoderRulesFileInstructions?: string,
+    localBluesAICoderRulesFileInstructions?: string,
     localCursorRulesFileInstructions?: string,
     localCursorRulesDirInstructions?: string,
     localWindsurfRulesFileInstructions?: string,
-    clineIgnoreInstructions?: string,
+    bluesaicoderIgnoreInstructions?: string,
     preferredLanguageInstructions?: string,
 ) {
     let customInstructions = ""
     if (preferredLanguageInstructions) {
         customInstructions += preferredLanguageInstructions + "\n\n"
     }
-    if (globalClineRulesFileInstructions) {
-        customInstructions += globalClineRulesFileInstructions + "\n\n"
+    if (globalBluesAICoderRulesFileInstructions) {
+        customInstructions += globalBluesAICoderRulesFileInstructions + "\n\n"
     }
-    if (localClineRulesFileInstructions) {
-        customInstructions += localClineRulesFileInstructions + "\n\n"
+    if (localBluesAICoderRulesFileInstructions) {
+        customInstructions += localBluesAICoderRulesFileInstructions + "\n\n"
     }
     if (localCursorRulesFileInstructions) {
         customInstructions += localCursorRulesFileInstructions + "\n\n"
@@ -694,8 +694,8 @@ export function addUserInstructions(
     if (localWindsurfRulesFileInstructions) {
         customInstructions += localWindsurfRulesFileInstructions + "\n\n"
     }
-    if (clineIgnoreInstructions) {
-        customInstructions += clineIgnoreInstructions
+    if (bluesaicoderIgnoreInstructions) {
+        customInstructions += bluesaicoderIgnoreInstructions
     }
 
     return `

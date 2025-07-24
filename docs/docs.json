@@ -39,17 +39,17 @@
 		"links": [
 			{
 				"label": "GitHub",
-				"href": "https://github.com/cline/cline"
+				"href": "https://github.com/bluesaicoder/bluesaicoder"
 			},
 			{
 				"label": "Discord",
-				"href": "https://discord.gg/cline"
+				"href": "https://discord.gg/bluesaicoder"
 			}
 		],
 		"primary": {
 			"type": "button",
 			"label": "Install Cline",
-			"href": "https://cline.bot/install?utm_source=website&utm_medium=header"
+			"href": "https://bluesaicoder.bot/install?utm_source=website&utm_medium=header"
 		}
 	},
 	"navigation": {
@@ -58,24 +58,24 @@
 				"group": "Getting Started",
 				"pages": [
 					"getting-started/for-new-coders",
-					"getting-started/installing-cline",
+					"getting-started/installing-bluesaicoder",
 					"getting-started/installing-dev-essentials",
 					"getting-started/model-selection-guide",
 					"getting-started/task-management",
 					"getting-started/understanding-context-management",
-					"getting-started/what-is-cline"
+					"getting-started/what-is-bluesaicoder"
 				]
 			},
 			{
 				"group": "Improving Your Prompting Skills",
-				"pages": ["prompting/prompt-engineering-guide", "prompting/cline-memory-bank"]
+				"pages": ["prompting/prompt-engineering-guide", "prompting/bluesaicoder-memory-bank"]
 			},
 			{
 				"group": "Features",
 				"pages": [
 					"features/auto-approve",
 					"features/checkpoints",
-					"features/cline-rules",
+					"features/bluesaicoder-rules",
 					"features/drag-and-drop",
 					"features/plan-and-act",
 					"features/slash-commands/workflows",
@@ -115,9 +115,9 @@
 			{
 				"group": "Exploring Cline's Tools",
 				"pages": [
-					"exploring-clines-tools/cline-tools-guide",
-					"exploring-clines-tools/new-task-tool",
-					"exploring-clines-tools/remote-browser-support"
+					"exploring-bluesaicoders-tools/bluesaicoder-tools-guide",
+					"exploring-bluesaicoders-tools/new-task-tool",
+					"exploring-bluesaicoders-tools/remote-browser-support"
 				]
 			},
 			{
@@ -150,7 +150,7 @@
 					"provider-config/aws-bedrock-with-credentials-authentication",
 					"provider-config/aws-bedrock-with-profile-authentication",
 					"provider-config/gcp-vertex-ai",
-					"provider-config/litellm-and-cline-using-codestral",
+					"provider-config/litellm-and-bluesaicoder-using-codestral",
 					"provider-config/vscode-language-model-api",
 					"provider-config/xai-grok",
 					"provider-config/mistral-ai",
@@ -183,9 +183,9 @@
 	},
 	"footer": {
 		"socials": {
-			"x": "https://x.com/cline",
-			"github": "https://github.com/cline/cline",
-			"discord": "https://discord.gg/cline"
+			"x": "https://x.com/bluesaicoder",
+			"github": "https://github.com/bluesaicoder/bluesaicoder",
+			"discord": "https://discord.gg/bluesaicoder"
 		}
 	},
 	"search": {

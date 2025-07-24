@@ -1,7 +1,7 @@
 const { ESLintUtils } = require("@typescript-eslint/utils")
 const path = require("path")
 
-const createRule = ESLintUtils.RuleCreator((name) => `https://cline.bot/eslint-rules/${name}`)
+const createRule = ESLintUtils.RuleCreator((name) => `https://bluesaicoder.bot/eslint-rules/${name}`)
 
 // Configuration of disallowed VSCode APIs and their recommended alternatives
 const disallowedApis = {

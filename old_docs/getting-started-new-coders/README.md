@@ -89,4 +89,4 @@ Feel free to contact me, and I'll help you get started with Cline.
 
 nick | 608-558-2410
 
-Join our Discord community: [https://discord.gg/cline](https://discord.gg/cline)
+Join our Discord community: [https://discord.gg/bluesaicoder](https://discord.gg/bluesaicoder)

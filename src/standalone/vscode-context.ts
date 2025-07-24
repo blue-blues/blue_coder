@@ -9,9 +9,9 @@ import { outputChannel, postMessage } from "./vscode-context-stubs"
 import { EnvironmentVariableCollection, MementoStore, readJson, SecretStore } from "./vscode-context-utils"
 
 const VERSION = getPackageVersion()
-log("Running standalone cline ", VERSION)
+log("Running standalone bluesaicoder ", VERSION)
 
-const CLINE_DIR = process.env.CLINE_DIR || `${os.homedir()}/.cline`
+const CLINE_DIR = process.env.CLINE_DIR || `${os.homedir()}/.bluesaicoder`
 const DATA_DIR = path.join(CLINE_DIR, "data")
 mkdirSync(DATA_DIR, { recursive: true })
 log("Using settings dir:", DATA_DIR)
@@ -40,15 +40,15 @@ const extensionContext: ExtensionContext = {
 
 	// Set up URIs.
 	storageUri: URI.file(DATA_DIR),
-	storagePath: DATA_DIR, // Deprecated, not used in cline.
+	storagePath: DATA_DIR, // Deprecated, not used in bluesaicoder.
 	globalStorageUri: URI.file(DATA_DIR),
-	globalStoragePath: DATA_DIR, // Deprecated, not used in cline.
+	globalStoragePath: DATA_DIR, // Deprecated, not used in bluesaicoder.
 
 	logUri: URI.file(DATA_DIR),
-	logPath: DATA_DIR, // Deprecated, not used in cline.
+	logPath: DATA_DIR, // Deprecated, not used in bluesaicoder.
 
 	extensionUri: URI.file(EXTENSION_DIR),
-	extensionPath: EXTENSION_DIR, // Deprecated, not used in cline.
+	extensionPath: EXTENSION_DIR, // Deprecated, not used in bluesaicoder.
 	asAbsolutePath: (relPath: string) => path.join(EXTENSION_DIR, relPath),
 
 	subscriptions: [], // These need to be destroyed when the extension is deactivated.

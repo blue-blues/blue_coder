@@ -3,11 +3,11 @@ import * as sinon from "sinon"
 import * as should from "should"
 import * as vscode from "vscode"
 import * as stateModule from "@core/storage/state"
-import { createClineAPI } from "../index"
-import type { ClineAPI } from "../cline"
+import { createBluesAICoderAPI } from "../index"
+import type { BluesAICoderAPI } from "../bluesaicoder"
 
-describe("ClineAPI Core Functionality", () => {
-	let api: ClineAPI
+describe("BluesAICoderAPI Core Functionality", () => {
+	let api: BluesAICoderAPI
 	let mockController: any
 	let mockOutputChannel: sinon.SinonStubbedInstance<vscode.OutputChannel>
 	let sandbox: sinon.SinonSandbox
@@ -25,14 +25,14 @@ describe("ClineAPI Core Functionality", () => {
 			hide: sandbox.stub(),
 			dispose: sandbox.stub(),
 			replace: sandbox.stub(),
-			name: "Cline Test",
+			name: "BluesAICoder Test",
 		} as any
 
 		// Stub the getGlobalState function from the state module
-		// This is needed because the real createClineAPI uses it for getCustomInstructions
+		// This is needed because the real createBluesAICoderAPI uses it for getCustomInstructions
 		getGlobalStateStub = sandbox.stub(stateModule, "getGlobalState")
 
-		// Create a mock controller that matches what the real createClineAPI expects
+		// Create a mock controller that matches what the real createBluesAICoderAPI expects
 		// We don't import the real Controller to avoid the webview dependencies
 		mockController = {
 			context: {
@@ -58,7 +58,7 @@ describe("ClineAPI Core Functionality", () => {
 		}
 
 		// Create API instance
-		api = createClineAPI(mockOutputChannel as any, mockController)
+		api = createBluesAICoderAPI(mockOutputChannel as any, mockController)
 	})
 
 	afterEach(() => {

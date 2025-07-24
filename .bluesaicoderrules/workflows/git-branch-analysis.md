@@ -13,12 +13,12 @@ Analyze the current branch's changes against main to provide informed insights a
 
 **If the expected line count is greater than 500 lines, use the file-based approach:**
    ```shell
-   git branch --show-current > cline-git-analysis.temp && echo "=== STATUS ===" >> cline-git-analysis.temp && git status --porcelain >> cline-git-analysis.temp && echo "=== COMMIT MESSAGES ===" >> cline-git-analysis.temp && git log main..HEAD --oneline >> cline-git-analysis.temp && echo "=== CHANGED FILES ===" >> cline-git-analysis.temp && git diff main --name-only >> cline-git-analysis.temp && echo "=== FULL DIFF ===" >> cline-git-analysis.temp && git diff main >> cline-git-analysis.temp
+   git branch --show-current > bluesaicoder-git-analysis.temp && echo "=== STATUS ===" >> bluesaicoder-git-analysis.temp && git status --porcelain >> bluesaicoder-git-analysis.temp && echo "=== COMMIT MESSAGES ===" >> bluesaicoder-git-analysis.temp && git log main..HEAD --oneline >> bluesaicoder-git-analysis.temp && echo "=== CHANGED FILES ===" >> bluesaicoder-git-analysis.temp && git diff main --name-only >> bluesaicoder-git-analysis.temp && echo "=== FULL DIFF ===" >> bluesaicoder-git-analysis.temp && git diff main >> bluesaicoder-git-analysis.temp
    ```
 
    Then, read the file using the read_file tool. After you have read the file but before you proceed with subsequent steps, delete it:
    ```shell
-   rm cline-git-analysis.temp
+   rm bluesaicoder-git-analysis.temp
    ```
 
 **If the expected line count is 500 lines or fewer, use the direct approach:**

@@ -5,7 +5,7 @@ import { StreamingCallbacks } from "@/hosts/host-provider-types"
 
 const log = (...args: unknown[]) => {
 	const timestamp = new Date().toISOString()
-	console.log(`[${timestamp}]`, "#bot.cline.server.ts", ...args)
+	console.log(`[${timestamp}]`, "#bot.bluesaicoder.server.ts", ...args)
 }
 
 function getPackageDefinition() {

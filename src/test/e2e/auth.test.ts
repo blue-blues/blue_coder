@@ -14,11 +14,11 @@ e2e("Auth - can set up API keys", async ({ page, sidebar }) => {
 	// Verify provider selector is visible and set to OpenRouter
 	await expect(sidebar.locator("slot").filter({ hasText: /^OpenRouter$/ })).toBeVisible()
 
-	// Test Cline provider option
+	// Test BluesAICoder provider option
 	await providerSelector.click({ delay: 100 })
-	await expect(sidebar.getByRole("option", { name: "Cline" })).toBeVisible()
-	await sidebar.getByRole("option", { name: "Cline" }).click({ delay: 100 })
-	await expect(sidebar.getByRole("button", { name: "Sign Up with Cline" })).toBeVisible()
+	await expect(sidebar.getByRole("option", { name: "BluesAICoder" })).toBeVisible()
+	await sidebar.getByRole("option", { name: "BluesAICoder" }).click({ delay: 100 })
+	await expect(sidebar.getByRole("button", { name: "Sign Up with BluesAICoder" })).toBeVisible()
 
 	// Switch to OpenRouter and complete setup
 	await providerSelector.click({ delay: 100 })
@@ -38,13 +38,13 @@ e2e("Auth - can set up API keys", async ({ page, sidebar }) => {
 	await expect(providerSelector).not.toBeVisible()
 
 	// Verify you are now in the chat page after setup was completed
-	const clineLogo = sidebar.getByRole("img").filter({ hasText: /^$/ }).locator("path")
-	await expect(clineLogo).toBeVisible()
+	const bluesaicoderLogo = sidebar.getByRole("img").filter({ hasText: /^$/ }).locator("path")
+	await expect(bluesaicoderLogo).toBeVisible()
 	const chatInputBox = sidebar.getByTestId("chat-input")
 	await expect(chatInputBox).toBeVisible()
 
 	// Verify the help improve banner is visible and can be closed.
-	const helpBanner = sidebar.getByText("Help Improve Cline")
+	const helpBanner = sidebar.getByText("Help Improve BluesAICoder")
 	await expect(helpBanner).toBeVisible()
 	await sidebar.getByRole("button", { name: "Close banner and enable" }).click()
 	await expect(helpBanner).not.toBeVisible()

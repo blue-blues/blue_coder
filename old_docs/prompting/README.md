@@ -23,19 +23,19 @@ Custom instructions are powerful for:
 
 **The `custom-instructions` folder contains examples of custom instructions you can use or adapt.**
 
-## .clinerules File 📋
+## .bluesaicoderrules File 📋
 
-While custom instructions are user-specific and global (applying across all projects), the `.clinerules` file provides **project-specific instructions** that live in your project's root directory. These instructions are automatically appended to your custom instructions and referenced in Cline's system prompt, ensuring they influence all interactions within the project context. This makes it an excellent tool for:
+While custom instructions are user-specific and global (applying across all projects), the `.bluesaicoderrules` file provides **project-specific instructions** that live in your project's root directory. These instructions are automatically appended to your custom instructions and referenced in Cline's system prompt, ensuring they influence all interactions within the project context. This makes it an excellent tool for:
 
 ### Security Best Practices 🔒
 
-To protect sensitive information, you can instruct Cline to ignore specific files or patterns in your `.clinerules`. This is particularly important for:
+To protect sensitive information, you can instruct Cline to ignore specific files or patterns in your `.bluesaicoderrules`. This is particularly important for:
 
 -   `.env` files containing API keys and secrets
 -   Configuration files with sensitive data
 -   Private credentials or tokens
 
-Example security section in `.clinerules`:
+Example security section in `.bluesaicoderrules`:
 
 ```markdown
 # Security
@@ -58,7 +58,7 @@ DO NOT read or modify:
 
 ### General Use Cases
 
-The `.clinerules` file is excellent for:
+The `.bluesaicoderrules` file is excellent for:
 
 -   Maintaining project standards across team members
 -   Enforcing development practices
@@ -66,7 +66,7 @@ The `.clinerules` file is excellent for:
 -   Setting up analysis frameworks
 -   Defining project-specific behaviors
 
-### Example .clinerules Structure
+### Example .bluesaicoderrules Structure
 
 ```markdown
 # Project Guidelines
@@ -105,22 +105,22 @@ Create ADRs in /docs/adr for:
 
 ### Key Benefits
 
-1. **Version Controlled**: The `.clinerules` file becomes part of your project's source code
+1. **Version Controlled**: The `.bluesaicoderrules` file becomes part of your project's source code
 2. **Team Consistency**: Ensures consistent behavior across all team members
 3. **Project-Specific**: Rules and standards tailored to each project's needs
 4. **Institutional Knowledge**: Maintains project standards and practices in code
 
-Place the `.clinerules` file in your project's root directory:
+Place the `.bluesaicoderrules` file in your project's root directory:
 
 ```
 your-project/
-├── .clinerules
+├── .bluesaicoderrules
 ├── src/
 ├── docs/
 └── ...
 ```
 
-Cline's system prompt, on the other hand, is not user-editable ([here's where you can find it](https://github.com/cline/cline/blob/main/src/core/prompts/system.ts)). For a broader look at prompt engineering best practices, check out [this resource](https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview).
+Cline's system prompt, on the other hand, is not user-editable ([here's where you can find it](https://github.com/bluesaicoder/bluesaicoder/blob/main/src/core/prompts/system.ts)). For a broader look at prompt engineering best practices, check out [this resource](https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview).
 
 ### Tips for Writing Effective Custom Instructions
 
@@ -129,24 +129,24 @@ Cline's system prompt, on the other hand, is not user-editable ([here's where yo
 -   Test and Iterate: Experiment to find what works best for your workflow.
 
 
-### Support for Loading Files from the `.clinerules/` Directory
-All files under the `.clinerules/` directory are recursively loaded, and their contents are merged into clineRulesFileInstructions.
+### Support for Loading Files from the `.bluesaicoderrules/` Directory
+All files under the `.bluesaicoderrules/` directory are recursively loaded, and their contents are merged into bluesaicoderRulesFileInstructions.
 
 #### Example 1:
 ```
-.clinerules/
-├── .local-clinerules
-└── .project-clinerules
+.bluesaicoderrules/
+├── .local-bluesaicoderrules
+└── .project-bluesaicoderrules
 ```
 
 #### Example 2:
 ```
-.clinerules/
-├── .clinerules-nextjs
-├── .clinerules-serverside
+.bluesaicoderrules/
+├── .bluesaicoderrules-nextjs
+├── .bluesaicoderrules-serverside
 └── tests/
-    ├── .pytest-clinerules
-    └── .jest-clinerules
+    ├── .pytest-bluesaicoderrules
+    └── .jest-bluesaicoderrules
 ```
 
 ## Prompting Cline 💬
@@ -165,7 +165,7 @@ Effective prompting involves:
 #### Context Management
 
 -   **Starting a New Task:** "Cline, let's start a new task. Create `user-authentication.js`. We need to implement user login with JWT tokens. Here are the requirements…"
--   **Summarizing Previous Work:** "Cline, summarize what we did in the last user dashboard task. I want to capture the main features and outstanding issues. Save this to `cline_docs/user-dashboard-summary.md`."
+-   **Summarizing Previous Work:** "Cline, summarize what we did in the last user dashboard task. I want to capture the main features and outstanding issues. Save this to `bluesaicoder_docs/user-dashboard-summary.md`."
 
 #### Debugging
 

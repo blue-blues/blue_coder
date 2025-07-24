@@ -199,7 +199,7 @@ export abstract class WebviewProvider {
 				<link rel="stylesheet" type="text/css" href="${stylesUri}">
 				<link href="${codiconsUri}" rel="stylesheet" />
 				<meta http-equiv="Content-Security-Policy" content="default-src 'none';
-					connect-src https://*.posthog.com https://*.cline.bot https://*.firebaseauth.com https://*.firebaseio.com https://*.googleapis.com https://*.firebase.com; 
+					connect-src https://*.posthog.com https://*.bluesaicoder.bot https://*.firebaseauth.com https://*.firebaseio.com https://*.googleapis.com https://*.firebase.com; 
 					font-src ${this.getCspSource()} data:; 
 					style-src ${this.getCspSource()} 'unsafe-inline'; 
 					img-src ${this.getCspSource()} https: data:; 
@@ -214,7 +214,7 @@ export abstract class WebviewProvider {
                     window.WEBVIEW_PROVIDER_TYPE = ${JSON.stringify(this.providerType)};
                     
                     // Inject the client ID
-                    window.clineClientId = "${this.clientId}";
+                    window.bluesaicoderClientId = "${this.clientId}";
                 </script>
 				<script type="module" nonce="${nonce}" src="${scriptUri}"></script>
 			</body>
@@ -319,7 +319,7 @@ export abstract class WebviewProvider {
 						window.WEBVIEW_PROVIDER_TYPE = ${JSON.stringify(this.providerType)};
 						
 						// Inject the client ID
-						window.clineClientId = "${this.clientId}";
+						window.bluesaicoderClientId = "${this.clientId}";
 					</script>
 					${reactRefresh}
 					<script type="module" src="${scriptUri}"></script>

@@ -51,7 +51,7 @@ export async function getSidebar(page: Page): Promise<Frame> {
 
 			try {
 				const title = await frame.title()
-				if (title.startsWith("Cline")) {
+				if (title.startsWith("BluesAICoder")) {
 					cachedFrame = frame
 					return frame
 				}
@@ -100,8 +100,11 @@ export async function signin(webview: Frame): Promise<void> {
 	await expect(byokButton).not.toBeVisible()
 }
 
-export async function openClineSidebar(page: Page): Promise<void> {
-	await page.getByRole("tab", { name: /Cline/ }).locator("a").click()
+export async function openBluesAICoderSidebar(page: Page): Promise<void> {
+	await page
+		.getByRole("tab", { name: /BluesAICoder/ })
+		.locator("a")
+		.click()
 }
 
 export async function runCommandPalette(page: Page, command: string): Promise<void> {
@@ -173,7 +176,7 @@ export const e2e = test
 		page: async ({ app }, use) => {
 			const page = await app.firstWindow()
 			await runCommandPalette(page, "notifications: toggle do not disturb")
-			await openClineSidebar(page)
+			await openBluesAICoderSidebar(page)
 			await use(page)
 		},
 	})

@@ -1,9 +1,9 @@
 export const bashToolName = "Bash"
 
-const CO_AUTHORED_COMMIT_MSG = `\uD83E\uDD16 Generated with [Cline](https://docs.cline.bot)
+const CO_AUTHORED_COMMIT_MSG = `\uD83E\uDD16 Generated with [BluesAICoder](https://docs.bluesaicoder.bot)
 
-   Co-Authored-By: Cline <noreply@cline.bot>`
-const CO_AUTHORED_PR_MSG = `\uD83E\uDD16 Generated with [Cline](https://docs.cline.bot)`
+   Co-Authored-By: BluesAICoder <noreply@bluesaicoder.bot>`
+const CO_AUTHORED_PR_MSG = `\uD83E\uDD16 Generated with [BluesAICoder](https://docs.bluesaicoder.bot)`
 
 const descriptionForAgent = (
 	cwd: string,
@@ -122,8 +122,7 @@ export const bashToolDefinition = (cwd: string) => ({
 			},
 			reason: {
 				type: "string",
-				description:
-					"A brief justification for why the command requires approval. This will be shown to the user.",
+				description: "A brief justification for why the command requires approval. This will be shown to the user.",
 			},
 		},
 		required: ["command", "requires_approval"],

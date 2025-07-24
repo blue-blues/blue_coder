@@ -13,8 +13,8 @@ body:
               **For contribution offers:** You can indicate your willingness to implement the feature yourself.
 
               Before submitting:
-              - Search existing [Issues](https://github.com/cline/cline/issues) and [Discussions](https://github.com/cline/cline/discussions) to avoid duplicates
-              - Read the [Contributing Guide](https://github.com/cline/cline/blob/main/CONTRIBUTING.md) if you plan to contribute
+              - Search existing [Issues](https://github.com/bluesaicoder/bluesaicoder/issues) and [Discussions](https://github.com/bluesaicoder/bluesaicoder/discussions) to avoid duplicates
+              - Read the [Contributing Guide](https://github.com/bluesaicoder/bluesaicoder/blob/main/CONTRIBUTING.md) if you plan to contribute
               - Don't start implementation until the proposal is reviewed and approved
 
     - type: textarea
@@ -111,6 +111,6 @@ body:
           label: Contribution checklist (if contributing)
           description: Only check these if you plan to contribute
           options:
-              - label: I've read the [Contributing Guide](https://github.com/cline/cline/blob/main/CONTRIBUTING.md)
+              - label: I've read the [Contributing Guide](https://github.com/bluesaicoder/bluesaicoder/blob/main/CONTRIBUTING.md)
               - label: I'm willing to make changes based on feedback
               - label: I understand the code review process and requirements

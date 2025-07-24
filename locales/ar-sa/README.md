@@ -1,11 +1,11 @@
 <div align="center"><sub>
-العربية | <a href="https://github.com/cline/cline/blob/main/locales/es/README.md" target="_blank">الإسبانية</a> | <a href="https://github.com/cline/cline/blob/main/locales/de/README.md" target="_blank">الألمانية</a> | <a href="https://github.com/cline/cline/blob/main/locales/ja/README.md" target="_blank">اليابانية</a> | <a href="https://github.com/cline/cline/blob/main/locales/zh-cn/README.md" target="_blank">الصينية المبسطة</a> | <a href="https://github.com/cline/cline/blob/main/locales/zh-tw/README.md" target="_blank">الصينية التقليدية</a> | <a href="https://github.com/cline/cline/blob/main/locales/pt-BR/README.md" target="_blank">البرتغالية</a>
+العربية | <a href="https://github.com/bluesaicoder/bluesaicoder/blob/main/locales/es/README.md" target="_blank">الإسبانية</a> | <a href="https://github.com/bluesaicoder/bluesaicoder/blob/main/locales/de/README.md" target="_blank">الألمانية</a> | <a href="https://github.com/bluesaicoder/bluesaicoder/blob/main/locales/ja/README.md" target="_blank">اليابانية</a> | <a href="https://github.com/bluesaicoder/bluesaicoder/blob/main/locales/zh-cn/README.md" target="_blank">الصينية المبسطة</a> | <a href="https://github.com/bluesaicoder/bluesaicoder/blob/main/locales/zh-tw/README.md" target="_blank">الصينية التقليدية</a> | <a href="https://github.com/bluesaicoder/bluesaicoder/blob/main/locales/pt-BR/README.md" target="_blank">البرتغالية</a>
 </sub></div>
 
 # Cline
 
 <p align="center">
-  <img src="https://media.githubusercontent.com/media/cline/cline/main/assets/docs/demo.gif" width="100%" />
+  <img src="https://media.githubusercontent.com/media/bluesaicoder/bluesaicoder/main/assets/docs/demo.gif" width="100%" />
 </p>
 
 <div align="center">
@@ -15,16 +15,16 @@
 <a href="https://marketplace.visualstudio.com/items?itemName=saoudrizwan.claude-dev" target="_blank"><strong>تنزيل من متجر VS</strong></a>
 </td>
 <td align="center">
-<a href="https://discord.gg/cline" target="_blank"><strong>Discord</strong></a>
+<a href="https://discord.gg/bluesaicoder" target="_blank"><strong>Discord</strong></a>
 </td>
 <td align="center">
-<a href="https://www.reddit.com/r/cline/" target="_blank"><strong>r/cline</strong></a>
+<a href="https://www.reddit.com/r/bluesaicoder/" target="_blank"><strong>r/bluesaicoder</strong></a>
 </td>
 <td align="center">
-<a href="https://github.com/cline/cline/discussions/categories/feature-requests?discussions_q=is%3Aopen+category%3A%22Feature+Requests%22+sort%3Atop" target="_blank"><strong>طلبات الميزات</strong></a>
+<a href="https://github.com/bluesaicoder/bluesaicoder/discussions/categories/feature-requests?discussions_q=is%3Aopen+category%3A%22Feature+Requests%22+sort%3Atop" target="_blank"><strong>طلبات الميزات</strong></a>
 </td>
 <td align="center">
-<a href="https://docs.cline.bot/getting-started/getting-started-new-coders" target="_blank"><strong>البدء</strong></a>
+<a href="https://docs.bluesaicoder.bot/getting-started/getting-started-new-coders" target="_blank"><strong>البدء</strong></a>
 </td>
 </tbody>
 </table>
@@ -139,18 +139,18 @@
 
 ## المساهمة
 
-للمساهمة في المشروع، ابدأ بـ [دليل المساهمة](CONTRIBUTING.md) لتعلم الأساسيات. يمكنك أيضًا الانضمام إلى [خادم Discord](https://discord.gg/cline) للدردشة مع المساهمين الآخرين في قناة `#contributors`. إذا كنت تبحث عن عمل بدوام كامل، تحقق من الوظائف المتاحة على [صفحة التوظيف](https://cline.bot/join-us)!  
+للمساهمة في المشروع، ابدأ بـ [دليل المساهمة](CONTRIBUTING.md) لتعلم الأساسيات. يمكنك أيضًا الانضمام إلى [خادم Discord](https://discord.gg/bluesaicoder) للدردشة مع المساهمين الآخرين في قناة `#contributors`. إذا كنت تبحث عن عمل بدوام كامل، تحقق من الوظائف المتاحة على [صفحة التوظيف](https://bluesaicoder.bot/join-us)!  
 
 <details>
 <summary>تعليمات التطوير المحلي</summary>
 
 1. استنساخ المستودع _(يتطلب [git-lfs](https://git-lfs.com/))_:
     ```bash
-    git clone https://github.com/cline/cline.git
+    git clone https://github.com/bluesaicoder/bluesaicoder.git
     ```
 2. افتح المشروع في VSCode:
     ```bash
-    code cline
+    code bluesaicoder
     ```
 3. قم بتثبيت التبعيات اللازمة للامتداد وواجهة الويب:
     ```bash

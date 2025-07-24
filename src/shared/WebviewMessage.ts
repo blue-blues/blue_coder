@@ -57,7 +57,7 @@ export interface WebviewMessage {
 	grpc_request_cancel?: {
 		request_id: string // ID of the request to cancel
 	}
-	// For cline rules and workflows
+	// For bluesaicoder rules and workflows
 	isGlobal?: boolean
 	rulePath?: string
 	workflowPath?: string

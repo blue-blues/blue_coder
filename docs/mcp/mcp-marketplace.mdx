@@ -56,7 +56,7 @@ When you install an MCP server, several things happen automatically:
 ### 2. Configuration
 
 -   The MCP settings file is updated with your server configuration
--   This file is located at: `/Users/<username>/Library/Application Support/Code/User/globalStorage/saoudrizwan.claude-dev/settings/cline_mcp_settings.json`
+-   This file is located at: `/Users/<username>/Library/Application Support/Code/User/globalStorage/saoudrizwan.claude-dev/settings/bluesaicoder_mcp_settings.json`
 -   Environment variables (like API keys) are securely stored
 -   The server path is registered
 
@@ -109,7 +109,7 @@ If any of these commands fail or show older versions, please install/update befo
 
 To completely remove a faulty MCP server:
 
-1. Open the MCP settings file: `/Users/<username>/Library/Application Support/Code/User/globalStorage/saoudrizwan.claude-dev/settings/cline_mcp_settings.json`
+1. Open the MCP settings file: `/Users/<username>/Library/Application Support/Code/User/globalStorage/saoudrizwan.claude-dev/settings/bluesaicoder_mcp_settings.json`
 2. Delete the entire entry for your server from the `mcpServers` object
 3. Save the file
 4. Restart Cline
@@ -123,14 +123,14 @@ If you're getting an error when using an MCP server, you can try the following:
 -   Verify that paths to your server's files are correct
 -   Ensure all required environment variables are set
 -   Check if another process is using the same port (for HTTP-based servers)
--   Try removing and reinstalling the server (remove from both the `cline_mcp_settings.json` file and the `/Users/<username>/Documents/Cline/MCP/` directory)
+-   Try removing and reinstalling the server (remove from both the `bluesaicoder_mcp_settings.json` file and the `/Users/<username>/Documents/Cline/MCP/` directory)
 -   Use a terminal and run the command with its arguments directly. This will allow you to see the same errors that Cline is seeing
 
 ## MCP Server Rules
 
 Cline is already aware of your active MCP servers and what they are for, but when you have a lot of MCP servers enabled, it can be useful to define when to use each server.
 
-Utilize a `.clinerules` file or custom instructions to support intelligent MCP server activation through keyword-based triggers, making Cline's tool selection more intuitive and context-aware.
+Utilize a `.bluesaicoderrules` file or custom instructions to support intelligent MCP server activation through keyword-based triggers, making Cline's tool selection more intuitive and context-aware.
 
 ### How MCP Rules Work
 
@@ -196,4 +196,4 @@ For finance tasks like "What's Apple's stock price?", keywords like "stock" and 
 }
 ```
 
-Add this to your `.clinerules` file or to your custom instructions to make Cline's MCP server selection more intuitive and context-aware.
+Add this to your `.bluesaicoderrules` file or to your custom instructions to make Cline's MCP server selection more intuitive and context-aware.

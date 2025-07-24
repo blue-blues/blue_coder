@@ -3,7 +3,7 @@ const { EventEmitter } = require("events")
 const path = require("path")
 const os = require("os")
 
-// Enhanced terminal management for standalone Cline
+// Enhanced terminal management for standalone BluesAICoder
 // This replaces VSCode's terminal integration with real subprocess management
 
 class StandaloneTerminalProcess extends EventEmitter {
@@ -406,7 +406,7 @@ class StandaloneTerminalManager {
 		// Create new terminal
 		const newTerminalInfo = this.registry.createTerminal({
 			cwd: cwd,
-			name: `Cline Terminal ${this.registry.nextId}`,
+			name: `BluesAICoder Terminal ${this.registry.nextId}`,
 		})
 		this.terminalIds.add(newTerminalInfo.id)
 		console.log(`[StandaloneTerminalManager] Created new terminal ${newTerminalInfo.id}`)

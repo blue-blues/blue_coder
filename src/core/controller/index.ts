@@ -109,7 +109,7 @@ export class Controller {
 	// Auth methods
 	async handleSignOut() {
 		try {
-			// TODO: update to clineAccountId and then move clineApiKey to a clear function.
+			// TODO: update to bluesaicoderAccountId and then move bluesaicoderApiKey to a clear function.
 			await storeSecret(this.context, "bluesAiCoderAccountId", undefined)
 			await updateGlobalState(this.context, "userInfo", undefined)
 			await Promise.all([
@@ -310,7 +310,7 @@ export class Controller {
 				console.error("Failed to abort task")
 			})
 			if (this.task) {
-				// 'abandoned' will prevent this cline instance from affecting future cline instance gui. this may happen if its hanging on a streaming request
+				// 'abandoned' will prevent this bluesaicoder instance from affecting future bluesaicoder instance gui. this may happen if its hanging on a streaming request
 				this.task.taskState.abandoned = true
 			}
 			await this.initTask(undefined, undefined, undefined, historyItem) // clears task again, so we need to abortTask manually above
@@ -596,7 +596,7 @@ export class Controller {
 	}
 
 	// 'Fix with Cline' in code actions
-	async fixWithCline(code: string, filePath: string, languageId: string, diagnostics: vscode.Diagnostic[]) {
+	async fixWithBluesAICoder(code: string, filePath: string, languageId: string, diagnostics: vscode.Diagnostic[]) {
 		// Ensure the sidebar view is visible
 		await vscode.commands.executeCommand("blues-ai-coder.SidebarProvider.focus")
 		await setTimeoutPromise(100)
@@ -605,7 +605,7 @@ export class Controller {
 		const problemsString = this.convertDiagnosticsToProblemsString(diagnostics)
 		await this.initTask(`Fix the following code in ${fileMention}\n\`\`\`\n${code}\n\`\`\`\n\nProblems:\n${problemsString}`)
 
-		console.log("fixWithCline", code, filePath, languageId, diagnostics, problemsString)
+		console.log("fixWithBluesAICoder", code, filePath, languageId, diagnostics, problemsString)
 	}
 
 	convertDiagnosticsToProblemsString(diagnostics: vscode.Diagnostic[]) {
@@ -794,9 +794,9 @@ export class Controller {
 	// Caching mechanism to keep track of webview messages + API conversation history per provider instance
 
 	/*
-	Now that we use retainContextWhenHidden, we don't have to store a cache of cline messages in the user's state, but we could to reduce memory footprint in long conversations.
+	Now that we use retainContextWhenHidden, we don't have to store a cache of bluesaicoder messages in the user's state, but we could to reduce memory footprint in long conversations.
 
-	- We have to be careful of what state is shared between ClineProvider instances since there could be multiple instances of the extension running at once. For example when we cached cline messages using the same key, two instances of the extension could end up using the same key and overwriting each other's messages.
+	- We have to be careful of what state is shared between ClineProvider instances since there could be multiple instances of the extension running at once. For example when we cached bluesaicoder messages using the same key, two instances of the extension could end up using the same key and overwriting each other's messages.
 	- Some state does need to be shared between the instances, i.e. the API key--however there doesn't seem to be a good way to notify the other instances that the API key has changed.
 
 	We need to use a unique identifier for each ClineProvider instance's message cache since we could be running several instances of the extension outside of just the sidebar i.e. in editor panels.

@@ -9,7 +9,7 @@ import { useExtensionState } from "@/context/ExtensionStateContext"
 import { Mode } from "@shared/ChatSettings"
 
 /**
- * Props for the ClineProvider component
+ * Props for the BluesAICoderProvider component
  */
 interface BluesAiCoderProviderProps {
 	showModelOptions: boolean
@@ -28,7 +28,7 @@ export const BluesAiCoderProvider = ({ showModelOptions, isPopup, currentMode }:
 
 	return (
 		<div>
-			{/* Cline Account Info Card */}
+			{/* BluesAICoder Account Info Card */}
 			<div style={{ marginBottom: 14, marginTop: 4 }}>
 				<BluesAICoderAccountInfoCard />
 			</div>

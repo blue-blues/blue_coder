@@ -181,7 +181,7 @@ vscode.env.openExternal = async (uri) => {
 	return true
 }
 
-// Export the terminal manager globally for Cline core to use
+// Export the terminal manager globally for BluesAICoder core to use
 global.standaloneTerminalManager = globalTerminalManager
 
 console.log("Finished loading stub impls...")

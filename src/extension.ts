@@ -4,7 +4,7 @@ import { setTimeout as setTimeoutPromise } from "node:timers/promises"
 import * as vscode from "vscode"
 import pWaitFor from "p-wait-for"
 import { Logger } from "./services/logging/Logger"
-import { createClineAPI } from "./exports/index"
+import { createBluesAICoderAPI } from "./exports/index"
 import "./utils/path" // necessary to have access to String.prototype.toPosix
 import { DIFF_VIEW_URI_SCHEME } from "@hosts/vscode/VscodeDiffViewProvider"
 import assert from "node:assert"
@@ -54,12 +54,12 @@ let outputChannel: vscode.OutputChannel
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export async function activate(context: vscode.ExtensionContext) {
-	outputChannel = vscode.window.createOutputChannel("Cline")
+	outputChannel = vscode.window.createOutputChannel("BluesAICoder")
 	context.subscriptions.push(outputChannel)
 
 	ErrorService.initialize()
 	Logger.initialize(outputChannel)
-	Logger.log("Cline extension activated")
+	Logger.log("BluesAICoder extension activated")
 
 	maybeSetupHostProviders(context)
 
@@ -78,7 +78,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	// Version checking for autoupdate notification
 	const currentVersion = context.extension.packageJSON.version
-	const previousVersion = context.globalState.get<string>("clineVersion")
+	const previousVersion = context.globalState.get<string>("bluesaicoderVersion")
 	const sidebarWebview = HostProvider.get().createWebviewProvider(WebviewProviderType.SIDEBAR)
 
 	const testModeWatchers = await initializeTestMode(sidebarWebview)
@@ -96,23 +96,23 @@ export async function activate(context: vscode.ExtensionContext) {
 	// Perform post-update actions if necessary
 	try {
 		if (!previousVersion || currentVersion !== previousVersion) {
-			Logger.log(`Cline version changed: ${previousVersion} -> ${currentVersion}. First run or update detected.`)
+			Logger.log(`BluesAICoder version changed: ${previousVersion} -> ${currentVersion}. First run or update detected.`)
 
 			// Use the same condition as announcements: focus when there's a new announcement to show
 			const lastShownAnnouncementId = context.globalState.get<string>("lastShownAnnouncementId")
 			const latestAnnouncementId = context.extension?.packageJSON?.version?.split(".").slice(0, 2).join(".") ?? ""
 
 			if (lastShownAnnouncementId !== latestAnnouncementId) {
-				// Focus Cline when there's a new announcement to show (major/minor updates or fresh installs)
+				// Focus BluesAICoder when there's a new announcement to show (major/minor updates or fresh installs)
 				const message = previousVersion
-					? `Cline has been updated to v${currentVersion}`
-					: `Welcome to Cline v${currentVersion}`
+					? `BluesAICoder has been updated to v${currentVersion}`
+					: `Welcome to BluesAICoder v${currentVersion}`
 				await vscode.commands.executeCommand("blues-ai-coder.SidebarProvider.focus")
 				await new Promise((resolve) => setTimeout(resolve, 200))
 				HostProvider.window.showMessage({ type: ShowMessageType.INFORMATION, message })
 			}
 			// Always update the main version tracker for the next launch.
-			await context.globalState.update("clineVersion", currentVersion)
+			await context.globalState.update("bluesaicoderVersion", currentVersion)
 		}
 	} catch (error) {
 		const errorMessage = error instanceof Error ? error.message : String(error)
@@ -179,8 +179,8 @@ export async function activate(context: vscode.ExtensionContext) {
 		}),
 	)
 
-	const openClineInNewTab = async () => {
-		Logger.log("Opening Cline in new tab")
+	const openBluesAICoderInNewTab = async () => {
+		Logger.log("Opening BluesAICoder in new tab")
 		// (this example uses webviewProvider activation event which is necessary to deserialize cached webview, but since we use retainContextWhenHidden, we don't need to use that event)
 		// https://github.com/microsoft/vscode-extension-samples/blob/main/webview-sample/src/extension.ts
 		const tabWebview = HostProvider.get().createWebviewProvider(WebviewProviderType.TAB)
@@ -194,7 +194,7 @@ export async function activate(context: vscode.ExtensionContext) {
 		}
 		const targetCol = hasVisibleEditors ? Math.max(lastCol + 1, 1) : vscode.ViewColumn.Two
 
-		const panel = vscode.window.createWebviewPanel(WebviewProvider.tabPanelId, "Cline", targetCol, {
+		const panel = vscode.window.createWebviewPanel(WebviewProvider.tabPanelId, "BluesAICoder", targetCol, {
 			enableScripts: true,
 			retainContextWhenHidden: true,
 			localResourceRoots: [context.extensionUri],
@@ -212,8 +212,8 @@ export async function activate(context: vscode.ExtensionContext) {
 		await vscode.commands.executeCommand("workbench.action.lockEditorGroup")
 	}
 
-	context.subscriptions.push(vscode.commands.registerCommand("blues-ai-coder.popoutButtonClicked", openClineInNewTab))
-	context.subscriptions.push(vscode.commands.registerCommand("blues-ai-coder.openInNewTab", openClineInNewTab))
+	context.subscriptions.push(vscode.commands.registerCommand("blues-ai-coder.popoutButtonClicked", openBluesAICoderInNewTab))
+	context.subscriptions.push(vscode.commands.registerCommand("blues-ai-coder.openInNewTab", openBluesAICoderInNewTab))
 
 	context.subscriptions.push(
 		vscode.commands.registerCommand("blues-ai-coder.settingsButtonClicked", (webview: any) => {
@@ -307,7 +307,7 @@ export async function activate(context: vscode.ExtensionContext) {
 			.then((module) => {
 				const devTaskCommands = module.registerTaskCommands(context, sidebarWebview.controller)
 				context.subscriptions.push(...devTaskCommands)
-				Logger.log("Cline dev task commands registered")
+				Logger.log("BluesAICoder dev task commands registered")
 			})
 			.catch((error) => {
 				Logger.log("Failed to register dev task commands: " + error)
@@ -318,7 +318,7 @@ export async function activate(context: vscode.ExtensionContext) {
 		vscode.commands.registerCommand(
 			"blues-ai-coder.addToChat",
 			async (range?: vscode.Range, diagnostics?: vscode.Diagnostic[]) => {
-				await vscode.commands.executeCommand("blues-ai-coder.focusChatInput") // Ensure Cline is visible and input focused
+				await vscode.commands.executeCommand("blues-ai-coder.focusChatInput") // Ensure BluesAICoder is visible and input focused
 				await pWaitFor(() => !!WebviewProvider.getVisibleInstance())
 				const editor = vscode.window.activeTextEditor
 				if (!editor) {
@@ -451,40 +451,46 @@ export async function activate(context: vscode.ExtensionContext) {
 						)
 					}
 
-					// Add to Cline (Always available)
-					const addAction = new vscode.CodeAction("Add to Cline", vscode.CodeActionKind.QuickFix)
+					// Add to BluesAICoder (Always available)
+					const addAction = new vscode.CodeAction("Add to BluesAICoder", vscode.CodeActionKind.QuickFix)
 					addAction.command = {
 						command: "blues-ai-coder.addToChat",
-						title: "Add to Cline",
+						title: "Add to BluesAICoder",
 						arguments: [expandedRange, context.diagnostics],
 					}
 					actions.push(addAction)
 
-					// Explain with Cline (Always available)
-					const explainAction = new vscode.CodeAction("Explain with Cline", vscode.CodeActionKind.RefactorExtract) // Using a refactor kind
+					// Explain with BluesAICoder (Always available)
+					const explainAction = new vscode.CodeAction(
+						"Explain with BluesAICoder",
+						vscode.CodeActionKind.RefactorExtract,
+					) // Using a refactor kind
 					explainAction.command = {
 						command: "blues-ai-coder.explainCode",
-						title: "Explain with Cline",
+						title: "Explain with BluesAICoder",
 						arguments: [expandedRange],
 					}
 					actions.push(explainAction)
 
-					// Improve with Cline (Always available)
-					const improveAction = new vscode.CodeAction("Improve with Cline", vscode.CodeActionKind.RefactorRewrite) // Using a refactor kind
+					// Improve with BluesAICoder (Always available)
+					const improveAction = new vscode.CodeAction(
+						"Improve with BluesAICoder",
+						vscode.CodeActionKind.RefactorRewrite,
+					) // Using a refactor kind
 					improveAction.command = {
 						command: "blues-ai-coder.improveCode",
-						title: "Improve with Cline",
+						title: "Improve with BluesAICoder",
 						arguments: [expandedRange],
 					}
 					actions.push(improveAction)
 
-					// Fix with Cline (Only if diagnostics exist)
+					// Fix with BluesAICoder (Only if diagnostics exist)
 					if (context.diagnostics.length > 0) {
-						const fixAction = new vscode.CodeAction("Fix with Cline", vscode.CodeActionKind.QuickFix)
+						const fixAction = new vscode.CodeAction("Fix with BluesAICoder", vscode.CodeActionKind.QuickFix)
 						fixAction.isPreferred = true
 						fixAction.command = {
-							command: "blues-ai-coder.fixWithCline",
-							title: "Fix with Cline",
+							command: "blues-ai-coder.fixWithBluesAICoder",
+							title: "Fix with BluesAICoder",
 							arguments: [expandedRange, context.diagnostics],
 						}
 						actions.push(fixAction)
@@ -505,7 +511,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	// Register the command handler
 	context.subscriptions.push(
 		vscode.commands.registerCommand(
-			"blues-ai-coder.fixWithCline",
+			"blues-ai-coder.fixWithBluesAICoder",
 			async (range: vscode.Range, diagnostics: vscode.Diagnostic[]) => {
 				// Add this line to focus the chat input first
 				await vscode.commands.executeCommand("blues-ai-coder.focusChatInput")
@@ -522,15 +528,15 @@ export async function activate(context: vscode.ExtensionContext) {
 
 				// Send to sidebar provider with diagnostics
 				const visibleWebview = WebviewProvider.getVisibleInstance()
-				await visibleWebview?.controller.fixWithCline(selectedText, filePath, languageId, diagnostics)
-				telemetryService.captureButtonClick("codeAction_fixWithCline", visibleWebview?.controller.task?.taskId)
+				await visibleWebview?.controller.fixWithBluesAICoder(selectedText, filePath, languageId, diagnostics)
+				telemetryService.captureButtonClick("codeAction_fixWithBluesAICoder", visibleWebview?.controller.task?.taskId)
 			},
 		),
 	)
 
 	context.subscriptions.push(
 		vscode.commands.registerCommand("blues-ai-coder.explainCode", async (range: vscode.Range) => {
-			await vscode.commands.executeCommand("blues-ai-coder.focusChatInput") // Ensure Cline is visible and input focused
+			await vscode.commands.executeCommand("blues-ai-coder.focusChatInput") // Ensure BluesAICoder is visible and input focused
 			await pWaitFor(() => !!WebviewProvider.getVisibleInstance())
 			const editor = vscode.window.activeTextEditor
 			if (!editor) {
@@ -555,7 +561,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(
 		vscode.commands.registerCommand("blues-ai-coder.improveCode", async (range: vscode.Range) => {
-			await vscode.commands.executeCommand("blues-ai-coder.focusChatInput") // Ensure Cline is visible and input focused
+			await vscode.commands.executeCommand("blues-ai-coder.focusChatInput") // Ensure BluesAICoder is visible and input focused
 			await pWaitFor(() => !!WebviewProvider.getVisibleInstance())
 			const editor = vscode.window.activeTextEditor
 			if (!editor) {
@@ -608,7 +614,7 @@ export async function activate(context: vscode.ExtensionContext) {
 				}
 
 				if (!activeWebviewProvider) {
-					// No existing Cline view found at all, open a new tab
+					// No existing BluesAICoder view found at all, open a new tab
 					await vscode.commands.executeCommand("blues-ai-coder.openInNewTab")
 					// After openInNewTab, a new webview is created. We need to get this new instance.
 					// It might take a moment for it to register.
@@ -630,10 +636,10 @@ export async function activate(context: vscode.ExtensionContext) {
 				const clientId = activeWebviewProvider.getClientId()
 				sendFocusChatInputEvent(clientId)
 			} else {
-				Logger.error("FocusChatInput: Could not find or activate a Cline webview to focus.")
+				Logger.error("FocusChatInput: Could not find or activate a BluesAICoder webview to focus.")
 				HostProvider.window.showMessage({
 					type: ShowMessageType.ERROR,
-					message: "Could not activate Cline view. Please try opening it manually from the Activity Bar.",
+					message: "Could not activate BluesAICoder view. Please try opening it manually from the Activity Bar.",
 				})
 			}
 			telemetryService.captureButtonClick("command_focusChatInput", activeWebviewProvider?.controller.task?.taskId)
@@ -645,7 +651,7 @@ export async function activate(context: vscode.ExtensionContext) {
 		vscode.commands.registerCommand("blues-ai-coder.openWalkthrough", async () => {
 			await vscode.commands.executeCommand(
 				"workbench.action.openWalkthrough",
-				"saoudrizwan.blues-ai-coder#ClineWalkthrough",
+				"saoudrizwan.blues-ai-coder#BluesAICoderWalkthrough",
 			)
 			telemetryService.captureButtonClick("command_openWalkthrough")
 		}),
@@ -663,9 +669,9 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(
 		context.secrets.onDidChange(async (event) => {
-			if (event.key === "clineAccountId") {
+			if (event.key === "bluesaicoderAccountId") {
 				// Check if the secret was removed (logout) or added/updated (login)
-				const secretValue = await context.secrets.get("clineAccountId")
+				const secretValue = await context.secrets.get("bluesaicoderAccountId")
 				const authService = AuthService.getInstance(context)
 				if (secretValue) {
 					// Secret was added or updated - restore auth info (login from another window)
@@ -678,7 +684,7 @@ export async function activate(context: vscode.ExtensionContext) {
 		}),
 	)
 
-	return createClineAPI(outputChannel, sidebarWebview.controller)
+	return createBluesAICoderAPI(outputChannel, sidebarWebview.controller)
 }
 
 function maybeSetupHostProviders(context: ExtensionContext) {
@@ -703,7 +709,7 @@ export async function deactivate() {
 	cleanupTestMode()
 	await posthogClientProvider.shutdown()
 
-	Logger.log("Cline extension deactivated")
+	Logger.log("BluesAICoder extension deactivated")
 }
 
 // TODO: Find a solution for automatically removing DEV related content from production builds.

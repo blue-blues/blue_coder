@@ -5,7 +5,7 @@ import { DecorationController } from "@/hosts/vscode/DecorationController"
 import { DiffViewProvider } from "@integrations/editor/DiffViewProvider"
 import { diagnosticsToProblemsString, getNewDiagnostics } from "@/integrations/diagnostics"
 
-export const DIFF_VIEW_URI_SCHEME = "cline-diff"
+export const DIFF_VIEW_URI_SCHEME = "bluesaicoder-diff"
 
 export class VscodeDiffViewProvider extends DiffViewProvider {
 	private activeDiffEditor?: vscode.TextEditor
@@ -18,7 +18,7 @@ export class VscodeDiffViewProvider extends DiffViewProvider {
 		if (!this.absolutePath) {
 			throw new Error("No file path set")
 		}
-		// get diagnostics before editing the file, we'll compare to diagnostics after editing to see if cline needs to fix anything
+		// get diagnostics before editing the file, we'll compare to diagnostics after editing to see if bluesaicoder needs to fix anything
 		this.preDiagnostics = vscode.languages.getDiagnostics()
 
 		// if the file was already open, close it (must happen after showing the diff view since if it's the only tab the column will close)
@@ -180,7 +180,7 @@ export class VscodeDiffViewProvider extends DiffViewProvider {
 	}
 
 	protected async closeDiffView(): Promise<void> {
-		// Close all the cline diff views.
+		// Close all the bluesaicoder diff views.
 		const tabs = vscode.window.tabGroups.all
 			.flatMap((tg) => tg.tabs)
 			.filter((tab) => tab.input instanceof vscode.TabInputTextDiff && tab.input?.original?.scheme === DIFF_VIEW_URI_SCHEME)

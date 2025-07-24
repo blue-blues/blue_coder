@@ -134,8 +134,8 @@ async function updateAutoApprovalSettings(context: vscode.ExtensionContext, prov
  * @returns The created HTTP server instance
  */
 export function createTestServer(webviewProvider?: WebviewProvider): http.Server {
-	// Try to show the Cline sidebar
-	Logger.log("[createTestServer] Opening Cline in sidebar...")
+	// Try to show the BluesAICoder sidebar
+	Logger.log("[createTestServer] Opening BluesAICoder in sidebar...")
 	vscode.commands.executeCommand("workbench.view.blues-ai-coder-ActivityBar")
 
 	// Then ensure the webview is focused/loaded
@@ -201,7 +201,7 @@ export function createTestServer(webviewProvider?: WebviewProvider): http.Server
 				const visibleWebview = WebviewProvider.getVisibleInstance()
 				if (!visibleWebview || !visibleWebview.controller) {
 					res.writeHead(500)
-					res.end(JSON.stringify({ error: "No active Cline instance found" }))
+					res.end(JSON.stringify({ error: "No active BluesAICoder instance found" }))
 					return
 				}
 
@@ -252,7 +252,7 @@ export function createTestServer(webviewProvider?: WebviewProvider): http.Server
 					// Clear any existing task
 					await visibleWebview.controller.clearTask()
 
-					// TODO: convert apiKey to clineAccountId
+					// TODO: convert apiKey to bluesaicoderAccountId
 					// If API key is provided, update the API configuration
 					if (apiKey) {
 						Logger.log("API key provided, updating API configuration")
@@ -263,8 +263,8 @@ export function createTestServer(webviewProvider?: WebviewProvider): http.Server
 						// Update API configuration with API key
 						const updatedConfig = {
 							...apiConfiguration,
-							apiProvider: "cline" as ApiProvider,
-							clineAccountId: apiKey,
+							apiProvider: "bluesaicoder" as ApiProvider,
+							bluesaicoderAccountId: apiKey,
 						}
 
 						// Store the API key securely
@@ -273,9 +273,9 @@ export function createTestServer(webviewProvider?: WebviewProvider): http.Server
 						// Update the API configuration
 						await updateApiConfiguration(visibleWebview.controller.context, updatedConfig)
 
-						// Update global state to use cline provider
-						await updateGlobalState(visibleWebview.controller.context, "planModeApiProvider", "cline")
-						await updateGlobalState(visibleWebview.controller.context, "actModeApiProvider", "cline")
+						// Update global state to use bluesaicoder provider
+						await updateGlobalState(visibleWebview.controller.context, "planModeApiProvider", "bluesaicoder")
+						await updateGlobalState(visibleWebview.controller.context, "actModeApiProvider", "bluesaicoder")
 
 						// Post state to webview to reflect changes
 						await visibleWebview.controller.postStateToWebview()
@@ -354,7 +354,7 @@ export function createTestServer(webviewProvider?: WebviewProvider): http.Server
 								messages = await getSavedBluesAICoderMessages(visibleWebview.controller.context, taskId)
 							}
 						} catch (error) {
-							Logger.log(`Error getting saved Cline messages: ${error}`)
+							Logger.log(`Error getting saved BluesAICoder messages: ${error}`)
 						}
 
 						try {
@@ -503,7 +503,7 @@ export function createTestServer(webviewProvider?: WebviewProvider): http.Server
  * @returns A disposable that can be used to clean up the message catcher
  */
 export function createMessageCatcher(webviewProvider: WebviewProvider): vscode.Disposable {
-	Logger.log("Cline message catcher registered")
+	Logger.log("BluesAICoder message catcher registered")
 
 	if (webviewProvider && webviewProvider.controller) {
 		const originalPostMessageToWebview = webviewProvider.controller.postMessageToWebview
@@ -521,7 +521,7 @@ export function createMessageCatcher(webviewProvider: WebviewProvider): vscode.D
 
 			// Check for ask messages that require user intervention - commented out as partialMessage is now handled via gRPC
 			// if (message.type === "partialMessage" && message.partialMessage?.type === "ask" && !message.partialMessage.partial) {
-			// 	const askType = message.partialMessage.ask as ClineAsk
+			// 	const askType = message.partialMessage.ask as BluesAICoderAsk
 			// 	const askText = message.partialMessage.text
 
 			// 	// Automatically respond to different types of asks
@@ -538,7 +538,7 @@ export function createMessageCatcher(webviewProvider: WebviewProvider): vscode.D
 
 	return new vscode.Disposable(() => {
 		// Cleanup function if needed
-		Logger.log("Cline message catcher disposed")
+		Logger.log("BluesAICoder message catcher disposed")
 	})
 }
 
@@ -597,7 +597,7 @@ async function autoRespondToAsk(webviewProvider: WebviewProvider, askType: Blues
 			break
 
 		case "new_task":
-			// Decline creating a new task to keep the current task running
+			// Debluesaicoder creating a new task to keep the current task running
 			responseType = "messageResponse"
 			responseText = "Continue with the current task."
 			break

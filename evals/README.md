@@ -22,7 +22,7 @@ The evaluation system consists of two main components:
 ## Directory Structure
 
 ```
-cline-repo/
+bluesaicoder-repo/
 ├── src/
 │   ├── services/
 │   │   ├── test/

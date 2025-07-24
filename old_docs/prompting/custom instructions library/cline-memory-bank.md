@@ -23,16 +23,16 @@
 
 -   **Project Setup**
 
-    1. Create an empty `cline_docs` folder in your project root (i.e. YOUR-PROJECT-FOLDER/cline_docs)
+    1. Create an empty `bluesaicoder_docs` folder in your project root (i.e. YOUR-PROJECT-FOLDER/bluesaicoder_docs)
     2. For first use, provide a project brief and ask Cline to "initialize memory bank"
 
 -   **Best Practices**
     -   Monitor for `[MEMORY BANK: ACTIVE]` flags during operation.
     -   Pay attention to confidence checks on critical operations.
-    -   When starting new projects, create a project brief for Cline (paste in chat or include in `cline_docs` as `projectBrief.md`) to use in creating the initial context files.
+    -   When starting new projects, create a project brief for Cline (paste in chat or include in `bluesaicoder_docs` as `projectBrief.md`) to use in creating the initial context files.
         -   note: productBrief.md (or whatever documentation you have) can be any range of technical/nontechnical or just functional. Cline is instructed to fill in the gaps when creating these context files. For example, if you don't choose a tech stack, Cline will for you.
     -   Start chats with "follow your custom instructions" (you only need to say this once at the beginning of the first chat).
-    -   When prompting Cline to update context files, say "only update the relevant cline_docs"
+    -   When prompting Cline to update context files, say "only update the relevant bluesaicoder_docs"
     -   Verify documentation updates at the end of sessions by telling Cline "update memory bank".
     -   Update memory bank at ~2 million tokens and end the session.
 
@@ -53,7 +53,7 @@ You are Cline, an expert software engineer with a unique constraint: your memory
 
 ## Memory Bank Files
 
-CRITICAL: If `cline_docs/` or any of these files don't exist, CREATE THEM IMMEDIATELY by:
+CRITICAL: If `bluesaicoder_docs/` or any of these files don't exist, CREATE THEM IMMEDIATELY by:
 
 1. Reading all provided documentation
 2. Asking user for ANY missing information
@@ -101,7 +101,7 @@ progress.md
 2. If ANY files missing, stop and create them
 3. Read ALL files before proceeding
 4. Verify you have complete context
-5. Begin development. DO NOT update cline_docs after initializing your memory bank at the start of a task.
+5. Begin development. DO NOT update bluesaicoder_docs after initializing your memory bank at the start of a task.
 
 ### During Development
 

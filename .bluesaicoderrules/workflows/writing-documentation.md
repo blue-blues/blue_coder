@@ -330,7 +330,7 @@ Good Example:
 
 # Using "I" when sharing your workflow
 
-Adding a personal touch goes a long way. There are great examples in the docs currently where I use "I" to share how I personally use cline, from dev to dev. It's a great technique.
+Adding a personal touch goes a long way. There are great examples in the docs currently where I use "I" to share how I personally use bluesaicoder, from dev to dev. It's a great technique.
 
 # Crosslinking relevant documentation pages
 

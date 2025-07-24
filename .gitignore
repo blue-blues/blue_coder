@@ -11,7 +11,7 @@ tmp
 
 pnpm-lock.yaml
 
-.clineignore
+.bluesaicoderignore
 .venv
 .actrc
 

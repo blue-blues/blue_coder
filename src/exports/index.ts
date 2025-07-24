@@ -1,12 +1,12 @@
 import * as vscode from "vscode"
 import { Controller } from "@core/controller"
-import { ClineAPI } from "./cline"
+import { BluesAICoderAPI } from "./bluesaicoder"
 import { getGlobalState } from "@core/storage/state"
 import { sendChatButtonClickedEvent } from "@core/controller/ui/subscribeToChatButtonClicked"
 import { WebviewProviderType as WebviewProviderTypeEnum } from "@shared/proto/ui"
 
-export function createClineAPI(outputChannel: vscode.OutputChannel, sidebarController: Controller): ClineAPI {
-	const api: ClineAPI = {
+export function createBluesAICoderAPI(outputChannel: vscode.OutputChannel, sidebarController: Controller): BluesAICoderAPI {
+	const api: BluesAICoderAPI = {
 		startNewTask: async (task?: string, images?: string[]) => {
 			outputChannel.appendLine("Starting new task")
 			await sidebarController.clearTask()

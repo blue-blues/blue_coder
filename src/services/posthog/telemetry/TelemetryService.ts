@@ -8,7 +8,7 @@ import { posthogClientProvider } from "../PostHogClientProvider"
 import { Mode } from "@/shared/ChatSettings"
 
 /**
- * TelemetryService handles telemetry event tracking for the Cline extension
+ * TelemetryService handles telemetry event tracking for the BluesAICoder extension
  * Uses PostHog analytics to track user interactions and system events
  * Respects user privacy settings and VSCode's global telemetry configuration
  */
@@ -132,11 +132,11 @@ class TelemetryService {
 		if (globalTelemetryEnabled) {
 			this.telemetryEnabled = didUserOptIn
 		} else {
-			// Only show warning if user has opted in to Cline telemetry but VS Code telemetry is disabled
+			// Only show warning if user has opted in to BluesAICoder telemetry but VS Code telemetry is disabled
 			if (didUserOptIn) {
 				void vscode.window
 					.showWarningMessage(
-						"Anonymous Cline error and usage reporting is enabled, but VSCode telemetry is disabled. To enable error and usage reporting for this extension, enable VSCode telemetry in settings.",
+						"Anonymous BluesAICoder error and usage reporting is enabled, but VSCode telemetry is disabled. To enable error and usage reporting for this extension, enable VSCode telemetry in settings.",
 						"Open Settings",
 					)
 					.then((selection) => {
@@ -237,7 +237,7 @@ class TelemetryService {
 	}
 
 	/**
-	 * Records when cline calls the task completion_result tool signifying that cline is done with the task
+	 * Records when bluesaicoder calls the task completion_result tool signifying that bluesaicoder is done with the task
 	 * @param taskId Unique identifier for the task
 	 */
 	public captureTaskCompleted(taskId: string) {

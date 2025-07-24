@@ -11,7 +11,7 @@ This PR was opened by the Changesets release GitHub action. When you're ready to
 Releases
 claude-dev@3.14.0
 Minor Changes
-77c9863: create clinerules folder if its currently a file and creating new rule
+77c9863: create bluesaicoderrules folder if its currently a file and creating new rule
 0ffb7dd: disabling shift hint for now & improving tooltip behavior
 79b76fd: Add support for custom model ID in AWS Bedrock provider, enabling use of Application Inference Profile.
 eb6e481: Full support for LaTeX rendering
@@ -27,7 +27,7 @@ c78fe23: addressed race condition in terminal command usage
 91e222f: add checkpoints after more messages
 14230e7: add newrule slash command
 1c7d33a: Add remote config with posthog allowing for disabling new features until they're reading, making for a better developer experience.
-4196c14: add cache ui for open router and cline provider
+4196c14: add cache ui for open router and bluesaicoder provider
 d97424f: showing expanded task by default
 5294e78: Refactor to not pass a message for showing the MCP View from the servers modal
 70cc437: Fix Windows path issue: Correct handling of import.meta.url to avoid leading slash in pathname
@@ -66,12 +66,12 @@ d4bd755: fix cost calculation
 -   Add copy button to markdown blocks (Thanks @weshoke!)
 -   Add checkpoints to more messages
 -   Add slash command to create a new rules file (/newrule)
--   Add cache ui for open router and cline provider
+-   Add cache ui for open router and bluesaicoder provider
 -   Add Amazon Nova Premier model to Bedrock (Thanks @watany!)
 -   Add support for cursorrules and windsurfrules
 -   Add support for batch history deletion (Thanks @danix800!)
 -   Improve Drag & Drop experience
--   Create clinerules folder creating new rule if it's needed
+-   Create bluesaicoderrules folder creating new rule if it's needed
 -   Enable pricing calculation for gemini and vertex providers
 -   Refactor message handling to not show the MCP View of the server modal
 -   Migrate the addRemoteServer to protobus (Thanks @DaveFres!)
@@ -106,7 +106,7 @@ const Announcement = ({ version, hideAnnouncement }: AnnouncementProps) => {
 					easily.
 				</li>
 				<li>
-					<b>/newrule command:</b> New slash command to have cline write your .clinerules for you based on your
+					<b>/newrule command:</b> New slash command to have bluesaicoder write your .bluesaicoderrules for you based on your
 					workflow.
 				</li>
 				<li>
@@ -132,7 +132,7 @@ const Announcement = ({ version, hideAnnouncement }: AnnouncementProps) => {
 							projects.
 						</li>
 						<li>
-							<b>Cline Rules Popup:</b> New button in the chat area to view workspace and global cline rules files
+							<b>Cline Rules Popup:</b> New button in the chat area to view workspace and global bluesaicoder rules files
 							to plug and play specific rules for the task
 						</li>
 						<li>
@@ -199,15 +199,15 @@ const Announcement = ({ version, hideAnnouncement }: AnnouncementProps) => {
 			<div style={hrStyle} />
 			<p style={linkContainerStyle}>
 				Join us on{" "}
-				<VSCodeLink style={linkStyle} href="https://x.com/cline">
+				<VSCodeLink style={linkStyle} href="https://x.com/bluesaicoder">
 					X,
 				</VSCodeLink>{" "}
-				<VSCodeLink style={linkStyle} href="https://discord.gg/cline">
+				<VSCodeLink style={linkStyle} href="https://discord.gg/bluesaicoder">
 					discord,
 				</VSCodeLink>{" "}
 				or{" "}
-				<VSCodeLink style={linkStyle} href="https://www.reddit.com/r/cline/">
-					r/cline
+				<VSCodeLink style={linkStyle} href="https://www.reddit.com/r/bluesaicoder/">
+					r/bluesaicoder
 				</VSCodeLink>
 				for more updates!
 			</p>
@@ -221,7 +221,7 @@ const Announcement = ({ version, hideAnnouncement }: AnnouncementProps) => {
 <changeset>
 Minor Changes
 2964388: Added copy button to MermaidBlock component
-75143a7: Add the ability to fetch from global cline rules files
+75143a7: Add the ability to fetch from global bluesaicoder rules files
 Patch Changes
 a0252e7: convert inline style to tailwind css of file SettingsView.tsx
 ab59bd9: Add stream options back to xai provider
@@ -264,7 +264,7 @@ const Announcement = ({ version, hideAnnouncement }: AnnouncementProps) => {
 					<b>Global Cline Rules:</b> store multiple rules files in Documents/Cline/Rules to share between projects.
 				</li>
 				<li>
-					<b>Cline Rules Popup:</b> New button in the chat area to view workspace and global cline rules files to plug
+					<b>Cline Rules Popup:</b> New button in the chat area to view workspace and global bluesaicoder rules files to plug
 					and play specific rules for the task
 				</li>
 				<li>
@@ -342,15 +342,15 @@ const Announcement = ({ version, hideAnnouncement }: AnnouncementProps) => {
 			<div style={hrStyle} />
 			<p style={linkContainerStyle}>
 				Join us on{" "}
-				<VSCodeLink style={linkStyle} href="https://x.com/cline">
+				<VSCodeLink style={linkStyle} href="https://x.com/bluesaicoder">
 					X,
 				</VSCodeLink>{" "}
-				<VSCodeLink style={linkStyle} href="https://discord.gg/cline">
+				<VSCodeLink style={linkStyle} href="https://discord.gg/bluesaicoder">
 					discord,
 				</VSCodeLink>{" "}
 				or{" "}
-				<VSCodeLink style={linkStyle} href="https://www.reddit.com/r/cline/">
-					r/cline
+				<VSCodeLink style={linkStyle} href="https://www.reddit.com/r/bluesaicoder/">
+					r/bluesaicoder
 				</VSCodeLink>
 				for more updates!
 			</p>
@@ -436,7 +436,7 @@ Before doing any of this, make sure you check out the `changeset-release/main` a
 
 New announcement banners should ONLY be made for minor version bumps or higher. That's another reason why double checking if the changelog warrants the bump is important.
 
-Also, SUPER important: For any external contributors that aren't part of the cline github organization, we always want to add a (Thanks @username!) at the end of the changelog to attribute them properly. We're an open source project and it's ethical to do this.
+Also, SUPER important: For any external contributors that aren't part of the bluesaicoder github organization, we always want to add a (Thanks @username!) at the end of the changelog to attribute them properly. We're an open source project and it's ethical to do this.
 </important_note>
 
 Once the changelog looks good, and the version number looks good, we gotta double check that the version number in the changelog has the brackets around it. And as a final step, double check the package.json version number matches the latest number in the changelog. And as the ultimate final step we run `npm run install:all` to make sure the package version number permiates through the lock file. 
@@ -487,7 +487,7 @@ Once the changelog looks good, and the version number looks good, we gotta doubl
 	  # if you see a `Error executing command: The command ran successfully, but we couldn't capture its output. Please proceed accordingly.` error, just retry it until you actually get the output
 	  # don't make any assumptions, just retry the command to actually get the output and determine if they're external or not.
 	  # no output means they are an external contributor, otherwise if there is output they are an internal contributor (part of our github org)
-      gh api "orgs/cline/members" --jq "map(.login)" | grep -i "pashpashpash"
+      gh api "orgs/bluesaicoder/members" --jq "map(.login)" | grep -i "pashpashpash"
       ```
    
    d. View the full PR diff to understand code changes:

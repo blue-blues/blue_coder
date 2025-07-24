@@ -5,7 +5,7 @@ import { COLOR_WHITE, COLOR_GRAY, COLOR_DARK_GRAY, COLOR_BEIGE, COLOR_BLUE, COLO
  *
  * Get the color for a block or the indicator based on the message type
  *
- * @param message ClineMessage - The message to determine the color for
+ * @param message BluesAICoderMessage - The message to determine the color for
  * @returns string - The color code for the block or indicator
  */
 export const getColor = (message: BluesAICoderMessage): string => {
