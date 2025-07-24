@@ -2,8 +2,8 @@ import * as path from "path"
 import * as os from "os"
 import * as vscode from "vscode"
 import { arePathsEqual } from "@utils/path"
-import { HostProvider } from "@/hosts/host-provider"
-import { ShowMessageRequest, ShowMessageType } from "@/shared/proto/host/window"
+import { HostProvider } from "@hosts/host-provider"
+import { ShowMessageRequest, ShowMessageType } from "@shared/proto/host/window"
 import { writeFile } from "@utils/fs"
 
 export async function openImage(dataUri: string) {

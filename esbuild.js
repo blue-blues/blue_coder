@@ -1,69 +1,13 @@
 const esbuild = require("esbuild")
 const fs = require("fs")
 const path = require("path")
+const alias = require("esbuild-plugin-alias")
 
 const production = process.argv.includes("--production")
 const watch = process.argv.includes("--watch")
 const standalone = process.argv.includes("--standalone")
 const e2eBuild = process.argv.includes("--e2e-build")
 const destDir = standalone ? "dist-standalone" : "dist"
-
-/**
- * @type {import('esbuild').Plugin}
- */
-const aliasResolverPlugin = {
-	name: "alias-resolver",
-	setup(build) {
-		const aliases = {
-			"@": path.resolve(__dirname, "src"),
-			"@api": path.resolve(__dirname, "src/api"),
-			"@core": path.resolve(__dirname, "src/core"),
-			"@integrations": path.resolve(__dirname, "src/integrations"),
-			"@services": path.resolve(__dirname, "src/services"),
-			"@shared": path.resolve(__dirname, "src/shared"),
-			"@utils": path.resolve(__dirname, "src/utils"),
-			"@packages": path.resolve(__dirname, "src/packages"),
-		}
-
-		// For each alias entry, create a resolver
-		Object.entries(aliases).forEach(([alias, aliasPath]) => {
-			const aliasRegex = new RegExp(`^${alias}($|/.*)`)
-			build.onResolve({ filter: aliasRegex }, (args) => {
-				const importPath = args.path.replace(alias, aliasPath)
-
-				// First, check if the path exists as is
-				if (fs.existsSync(importPath)) {
-					const stats = fs.statSync(importPath)
-					if (stats.isDirectory()) {
-						// If it's a directory, try to find index files
-						const extensions = [".ts", ".tsx", ".js", ".jsx"]
-						for (const ext of extensions) {
-							const indexFile = path.join(importPath, `index${ext}`)
-							if (fs.existsSync(indexFile)) {
-								return { path: indexFile }
-							}
-						}
-					} else {
-						// It's a file that exists, so return it
-						return { path: importPath }
-					}
-				}
-
-				// If the path doesn't exist, try appending extensions
-				const extensions = [".ts", ".tsx", ".js", ".jsx"]
-				for (const ext of extensions) {
-					const pathWithExtension = `${importPath}${ext}`
-					if (fs.existsSync(pathWithExtension)) {
-						return { path: pathWithExtension }
-					}
-				}
-
-				// If nothing worked, return the original path and let esbuild handle the error
-				return { path: importPath }
-			})
-		})
-	},
-}
 
 const esbuildProblemMatcherPlugin = {
 	name: "esbuild-problem-matcher",
@@ -74,8 +18,7 @@ const esbuildProblemMatcherPlugin = {
 		})
 		build.onEnd((result) => {
 			result.errors.forEach(({ text, location }) => {
-				console.error(`✘ [ERROR] ${text}`)
-				console.error(`    ${location.file}:${location.line}:${location.column}:`)
+				;`✘ [ERROR] ${text}`(`    ${location.file}:${location.line}:${location.column}:`)
 			})
 			console.log("[watch] build finished")
 		})
@@ -134,7 +77,16 @@ const baseConfig = {
 	tsconfig: path.resolve(__dirname, "tsconfig.json"),
 	plugins: [
 		copyWasmFiles,
-		aliasResolverPlugin,
+		alias({
+			"@": path.resolve(__dirname, "src"),
+			"@api": path.resolve(__dirname, "src/api"),
+			"@core": path.resolve(__dirname, "src/core"),
+			"@integrations": path.resolve(__dirname, "src/integrations"),
+			"@services": path.resolve(__dirname, "src/services"),
+			"@shared": path.resolve(__dirname, "src/shared"),
+			"@utils": path.resolve(__dirname, "src/utils"),
+			"@packages": path.resolve(__dirname, "src/packages"),
+		}),
 		/* add to the end of plugins array */
 		esbuildProblemMatcherPlugin,
 	],
@@ -168,7 +120,19 @@ const e2eBuildConfig = {
 	outfile: `${destDir}/e2e-build.js`,
 	external: ["@vscode/test-electron", "execa"],
 	sourcemap: false,
-	plugins: [aliasResolverPlugin, esbuildProblemMatcherPlugin],
+	plugins: [
+		alias({
+			"@": path.resolve(__dirname, "src"),
+			"@api": path.resolve(__dirname, "src/api"),
+			"@core": path.resolve(__dirname, "src/core"),
+			"@integrations": path.resolve(__dirname, "src/integrations"),
+			"@services": path.resolve(__dirname, "src/services"),
+			"@shared": path.resolve(__dirname, "src/shared"),
+			"@utils": path.resolve(__dirname, "src/utils"),
+			"@packages": path.resolve(__dirname, "src/packages"),
+		}),
+		esbuildProblemMatcherPlugin,
+	],
 }
 
 async function main() {
@@ -183,6 +147,6 @@ async function main() {
 }
 
 main().catch((e) => {
-	console.error(e)
+	e
 	process.exit(1)
 })

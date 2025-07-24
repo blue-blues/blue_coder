@@ -187,7 +187,7 @@ export class AuthService {
 			throw new Error("Authentication URI is not configured")
 		}
 
-		const callbackUrl = `${vscode.env.uriScheme || "vscode"}://saoudrizwan.claude-dev/auth`
+		const callbackUrl = `${vscode.env.uriScheme || "vscode"}://saoudrizwan.blues-ai-coder/auth`
 
 		// Use URL object for more graceful query construction
 		const authUrl = new URL(this._config.URI)

@@ -1,4 +1,4 @@
-import { HostProvider } from "@/hosts/host-provider"
+import { HostProvider } from "@hosts/host-provider"
 import os from "os"
 import * as path from "path"
 import * as vscode from "vscode"

@@ -1,8 +1,8 @@
 import { Anthropic } from "@anthropic-ai/sdk"
 import os from "os"
 import * as path from "path"
-import { HostProvider } from "@/hosts/host-provider"
-import { ShowMessageType } from "@/shared/proto/host/window"
+import { HostProvider } from "@hosts/host-provider"
+import { ShowMessageType } from "@shared/proto/host/window"
 import { writeFile } from "@utils/fs"
 
 export async function downloadTask(dateTs: number, conversationHistory: Anthropic.MessageParam[]) {

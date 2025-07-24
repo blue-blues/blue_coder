@@ -1,4 +1,4 @@
-import execa from "execa"
+import { execa } from "execa"
 import * as path from "path"
 import * as fs from "fs"
 import fetch from "node-fetch"
@@ -121,7 +121,7 @@ export async function spawnVSCode(workspacePath: string, vsixPath?: string): Pro
 		// Show the activity bar and sidebar
 		"workbench.activityBar.visible": true,
 		"workbench.sideBar.visible": true,
-		"workbench.view.extension.saoudrizwan.claude-dev-ActivityBar.visible": true,
+		"workbench.view.extension.saoudrizwan.blues-ai-coder-ActivityBar.visible": true,
 		"workbench.view.alwaysShowHeaderActions": true,
 		"workbench.editor.openSideBySideDirection": "right",
 
@@ -145,13 +145,13 @@ export async function spawnVSCode(workspacePath: string, vsixPath?: string): Pro
 	const keybindings = [
 		{
 			key: "alt+c",
-			command: "workbench.view.extension.saoudrizwan.claude-dev-ActivityBar",
-			when: "viewContainer.workbench.view.extension.saoudrizwan.claude-dev-ActivityBar.enabled",
+			command: "workbench.view.extension.saoudrizwan.blues-ai-coder-ActivityBar",
+			when: "viewContainer.workbench.view.extension.saoudrizwan.blues-ai-coder-ActivityBar.enabled",
 		},
 		{
 			key: "alt+shift+c",
 			command: "cline.openInNewTab",
-			when: "viewContainer.workbench.view.extension.saoudrizwan.claude-dev-ActivityBar.enabled",
+			when: "viewContainer.workbench.view.extension.saoudrizwan.blues-ai-coder-ActivityBar.enabled",
 		},
 	]
 	fs.writeFileSync(keybindingsPath, JSON.stringify(keybindings, null, 2))
@@ -171,10 +171,10 @@ export async function spawnVSCode(workspacePath: string, vsixPath?: string): Pro
 		workspacePath,
 		// Force the extension to be activated on startup
 		"--start-up-extension",
-		"saoudrizwan.claude-dev",
+		"saoudrizwan.blues-ai-coder",
 		// Run a command on startup to open Cline
 		"--command",
-		"workbench.view.extension.saoudrizwan.claude-dev-ActivityBar",
+		"workbench.view.extension.saoudrizwan.blues-ai-coder-ActivityBar",
 		// Additional flags to help with extension activation
 		"--disable-gpu=false",
 		"--max-memory=4096",
@@ -186,7 +186,7 @@ export async function spawnVSCode(workspacePath: string, vsixPath?: string): Pro
 		// This script will be executed when VS Code starts
 		setTimeout(() => {
 			// Try to open Cline in the sidebar
-			require('vscode').commands.executeCommand('workbench.view.extension.saoudrizwan.claude-dev-ActivityBar');
+			require('vscode').commands.executeCommand('workbench.view.extension.saoudrizwan.blues-ai-coder-ActivityBar');
 			
 			// Also try to open Cline in a tab as a fallback
 			setTimeout(() => {
@@ -270,7 +270,7 @@ export async function spawnVSCode(workspacePath: string, vsixPath?: string): Pro
 				let disposable = vscode.commands.registerCommand('cline-activator.activate', async function () {
 					try {
 						// Make sure the Cline extension is activated
-						const extension = vscode.extensions.getExtension('saoudrizwan.claude-dev');
+						const extension = vscode.extensions.getExtension('saoudrizwan.blues-ai-coder');
 						if (!extension) {
 							console.error('Cline extension not found');
 							return;
@@ -283,7 +283,7 @@ export async function spawnVSCode(workspacePath: string, vsixPath?: string): Pro
 						
 						// Show the Cline sidebar
 						console.log('Opening Cline sidebar...');
-						await vscode.commands.executeCommand('workbench.view.extension.saoudrizwan.claude-dev-ActivityBar');
+						await vscode.commands.executeCommand('workbench.view.extension.saoudrizwan.blues-ai-coder-ActivityBar');
 						
 						// Wait a moment for the sidebar to initialize
 						await new Promise(resolve => setTimeout(resolve, 2000));
@@ -530,7 +530,7 @@ export async function cleanupVSCode(workspacePath: string): Promise<void> {
 		if (process.platform !== "win32") {
 			try {
 				const { stdout } = await execa("ps", ["aux"])
-				vsCodeStillRunning = stdout.split("\n").some((line) => line.includes(resources.tempUserDataDir))
+				vsCodeStillRunning = stdout.split("\n").some((line: string) => line.includes(resources.tempUserDataDir))
 			} catch (error) {
 				console.warn(`Error checking if VS Code is still running: ${error}`)
 			}

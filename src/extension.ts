@@ -63,23 +63,18 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	maybeSetupHostProviders(context)
 
-	// Migrate custom instructions to global Cline rules (one-time cleanup)
-	await migrateCustomInstructionsToGlobalRules(context)
-
-	// Migrate mode from workspace storage to controller state (one-time cleanup)
-	await migrateModeFromWorkspaceStorageToControllerState(context)
-
-	// Migrate welcomeViewCompleted setting based on existing API keys (one-time cleanup)
-	await migrateWelcomeViewCompleted(context)
-
-	// Migrate workspace storage values back to global storage (reverting previous migration)
-	await migrateWorkspaceToGlobalStorage(context)
-
-	// Migrate legacy API configuration to mode-specific keys (one-time migration)
-	await migrateLegacyApiConfigurationToModeSpecific(context)
-
-	// Clean up orphaned file context warnings (startup cleanup)
-	await FileContextTracker.cleanupOrphanedWarnings(context)
+	// Run migration and cleanup tasks in parallel
+	const startTime = Date.now()
+	await Promise.all([
+		migrateCustomInstructionsToGlobalRules(context),
+		migrateModeFromWorkspaceStorageToControllerState(context),
+		migrateWelcomeViewCompleted(context),
+		migrateWorkspaceToGlobalStorage(context),
+		migrateLegacyApiConfigurationToModeSpecific(context),
+		FileContextTracker.cleanupOrphanedWarnings(context),
+	])
+	const endTime = Date.now()
+	Logger.log(`Migration and cleanup tasks completed in ${endTime - startTime}ms`)
 
 	// Version checking for autoupdate notification
 	const currentVersion = context.extension.packageJSON.version
@@ -112,7 +107,7 @@ export async function activate(context: vscode.ExtensionContext) {
 				const message = previousVersion
 					? `Cline has been updated to v${currentVersion}`
 					: `Welcome to Cline v${currentVersion}`
-				await vscode.commands.executeCommand("claude-dev.SidebarProvider.focus")
+				await vscode.commands.executeCommand("blues-ai-coder.SidebarProvider.focus")
 				await new Promise((resolve) => setTimeout(resolve, 200))
 				HostProvider.window.showMessage({ type: ShowMessageType.INFORMATION, message })
 			}
@@ -121,7 +116,7 @@ export async function activate(context: vscode.ExtensionContext) {
 		}
 	} catch (error) {
 		const errorMessage = error instanceof Error ? error.message : String(error)
-		console.error(`Error during post-update actions: ${errorMessage}, Stack trace: ${error.stack}`)
+		Logger.error(`Error during post-update actions: ${errorMessage}, Stack trace: ${error.stack}`)
 	}
 
 	// backup id in case vscMachineID doesn't work
@@ -136,7 +131,6 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(
 		vscode.commands.registerCommand("cline.plusButtonClicked", async (webview: any) => {
-			console.log("[DEBUG] plusButtonClicked", webview)
 			// Pass the webview type to the event sender
 			const isSidebar = !webview
 
@@ -163,8 +157,6 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(
 		vscode.commands.registerCommand("cline.mcpButtonClicked", (webview: any) => {
-			console.log("[DEBUG] mcpButtonClicked", webview)
-
 			const activeInstance = WebviewProvider.getActiveInstance()
 			const isSidebar = !webview
 
@@ -174,14 +166,14 @@ export async function activate(context: vscode.ExtensionContext) {
 				if (sidebarInstanceId) {
 					sendMcpButtonClickedEvent(sidebarInstanceId)
 				} else {
-					console.error("[DEBUG] No sidebar instance found, cannot send MCP button event")
+					Logger.error("[DEBUG] No sidebar instance found, cannot send MCP button event")
 				}
 			} else {
 				const activeInstanceId = activeInstance?.getClientId()
 				if (activeInstanceId) {
 					sendMcpButtonClickedEvent(activeInstanceId)
 				} else {
-					console.error("[DEBUG] No active instance found, cannot send MCP button event")
+					Logger.error("[DEBUG] No active instance found, cannot send MCP button event")
 				}
 			}
 		}),
@@ -234,7 +226,6 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(
 		vscode.commands.registerCommand("cline.historyButtonClicked", async (webview: any) => {
-			console.log("[DEBUG] historyButtonClicked", webview)
 			// Pass the webview type to the event sender
 			const isSidebar = !webview
 			const webviewType = isSidebar ? WebviewProviderTypeEnum.SIDEBAR : WebviewProviderTypeEnum.TAB
@@ -246,8 +237,6 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(
 		vscode.commands.registerCommand("cline.accountButtonClicked", (webview: any) => {
-			console.log("[DEBUG] accountButtonClicked", webview)
-
 			const isSidebar = !webview
 			if (isSidebar) {
 				const sidebarInstance = WebviewProvider.getSidebarInstance()
@@ -281,12 +270,6 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	// URI Handler
 	const handleUri = async (uri: vscode.Uri) => {
-		console.log("URI Handler called with:", {
-			path: uri.path,
-			query: uri.query,
-			scheme: uri.scheme,
-		})
-
 		const path = uri.path
 		const query = new URLSearchParams(uri.query.replace(/\+/g, "%2B"))
 		const visibleWebview = WebviewProvider.getVisibleInstance()
@@ -302,12 +285,8 @@ export async function activate(context: vscode.ExtensionContext) {
 				break
 			}
 			case "/auth": {
-				console.log("Auth callback received:", uri.toString())
-
 				const token = query.get("idToken")
 				const provider = query.get("provider")
-
-				console.log("Auth callback received:", { provider })
 
 				if (token) {
 					await visibleWebview?.controller.handleAuthCallback(token, provider)
@@ -413,7 +392,7 @@ export async function activate(context: vscode.ExtensionContext) {
 			} catch (error) {
 				// Ensure clipboard is restored even if an error occurs
 				await writeTextToClipboard(tempCopyBuffer)
-				console.error("Error getting terminal contents:", error)
+				Logger.error("Error getting terminal contents:", error)
 				HostProvider.window.showMessage({
 					type: ShowMessageType.ERROR,
 					message: "Failed to get terminal contents",
@@ -604,7 +583,7 @@ export async function activate(context: vscode.ExtensionContext) {
 				panelView.reveal(panelView.viewColumn)
 			} else if (!activeWebviewProvider) {
 				// No webview is currently visible, try to activate the sidebar
-				await vscode.commands.executeCommand("claude-dev.SidebarProvider.focus")
+				await vscode.commands.executeCommand("blues-ai-coder.SidebarProvider.focus")
 				await new Promise((resolve) => setTimeout(resolve, 200)) // Allow time for focus
 				activeWebviewProvider = WebviewProvider.getSidebarInstance()
 
@@ -645,7 +624,7 @@ export async function activate(context: vscode.ExtensionContext) {
 				const clientId = activeWebviewProvider.getClientId()
 				sendFocusChatInputEvent(clientId)
 			} else {
-				console.error("FocusChatInput: Could not find or activate a Cline webview to focus.")
+				Logger.error("FocusChatInput: Could not find or activate a Cline webview to focus.")
 				HostProvider.window.showMessage({
 					type: ShowMessageType.ERROR,
 					message: "Could not activate Cline view. Please try opening it manually from the Activity Bar.",
@@ -658,7 +637,10 @@ export async function activate(context: vscode.ExtensionContext) {
 	// Register the openWalkthrough command handler
 	context.subscriptions.push(
 		vscode.commands.registerCommand("cline.openWalkthrough", async () => {
-			await vscode.commands.executeCommand("workbench.action.openWalkthrough", "saoudrizwan.claude-dev#ClineWalkthrough")
+			await vscode.commands.executeCommand(
+				"workbench.action.openWalkthrough",
+				"saoudrizwan.blues-ai-coder#ClineWalkthrough",
+			)
 			telemetryService.captureButtonClick("command_openWalkthrough")
 		}),
 	)
@@ -695,7 +677,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
 function maybeSetupHostProviders(context: ExtensionContext) {
 	if (!HostProvider.isInitialized()) {
-		console.log("Setting up vscode host providers...")
+		;("Setting up vscode host providers...")
 		const createWebview = function (type: WebviewProviderType) {
 			return new VscodeWebviewProvider(context, outputChannel, type)
 		}
@@ -733,7 +715,7 @@ if (IS_DEV && IS_DEV !== "false") {
 	const watcher = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(DEV_WORKSPACE_FOLDER, "src/**/*"))
 
 	watcher.onDidChange(({ scheme, path }) => {
-		console.info(`${scheme} ${path} changed. Reloading VSCode...`)
+		;`${scheme} ${path} changed. Reloading VSCode...`
 
 		vscode.commands.executeCommand("workbench.action.reloadWindow")
 	})

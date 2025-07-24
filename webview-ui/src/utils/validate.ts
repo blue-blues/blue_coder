@@ -1,5 +1,5 @@
 import { ApiConfiguration, openRouterDefaultModelId, ModelInfo } from "@shared/api"
-import { getModeSpecificFields } from "@/components/settings/utils/providerUtils"
+import { getModeSpecificFields } from "@components/settings/utils/providerUtils"
 import { Mode } from "@shared/ChatSettings"
 
 export function validateApiConfiguration(currentMode: Mode, apiConfiguration?: ApiConfiguration): string | undefined {

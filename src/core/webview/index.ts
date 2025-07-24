@@ -14,8 +14,8 @@ import { HostProvider } from "@/hosts/host-provider"
 import { ShowMessageRequest, ShowMessageType } from "@/shared/proto/host/window"
 
 export abstract class WebviewProvider {
-	public static readonly sideBarId = "claude-dev.SidebarProvider" // used in package.json as the view's id. This value cannot be changed due to how vscode caches views based on their id, and updating the id would break existing instances of the extension.
-	public static readonly tabPanelId = "claude-dev.TabPanelProvider"
+	public static readonly sideBarId = "blues-ai-coder.SidebarProvider" // used in package.json as the view's id. This value cannot be changed due to how vscode caches views based on their id, and updating the id would break existing instances of the extension.
+	public static readonly tabPanelId = "blues-ai-coder.TabPanelProvider"
 	private static activeInstances: Set<WebviewProvider> = new Set()
 	private static clientIdMap = new Map<WebviewProvider, string>()
 	protected disposables: vscode.Disposable[] = []
@@ -64,7 +64,7 @@ export abstract class WebviewProvider {
 		return Array.from(this.activeInstances).find((instance) => {
 			if (
 				instance.getWebview() &&
-				instance.getWebview().viewType === "claude-dev.TabPanelProvider" &&
+				instance.getWebview().viewType === "blues-ai-coder.TabPanelProvider" &&
 				"active" in instance.getWebview()
 			) {
 				return instance.getWebview().active === true

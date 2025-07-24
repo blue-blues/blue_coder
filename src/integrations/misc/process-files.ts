@@ -2,8 +2,8 @@ import * as vscode from "vscode"
 import fs from "fs/promises"
 import * as path from "path"
 import sizeOf from "image-size"
-import { HostProvider } from "@/hosts/host-provider"
-import { ShowMessageRequest, ShowMessageType, ShowOpenDialogueRequest } from "@/shared/proto/host/window"
+import { HostProvider } from "@hosts/host-provider"
+import { ShowMessageRequest, ShowMessageType, ShowOpenDialogueRequest } from "@shared/proto/host/window"
 
 /**
  * Supports processing of images and other file types
