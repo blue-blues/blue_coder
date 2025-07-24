@@ -4,7 +4,7 @@ import { setTimeout as setTimeoutPromise } from "node:timers/promises"
 import * as vscode from "vscode"
 import pWaitFor from "p-wait-for"
 import { Logger } from "./services/logging/Logger"
-import { createClineAPI } from "./exports"
+import { createClineAPI } from "./exports/index"
 import "./utils/path" // necessary to have access to String.prototype.toPosix
 import { DIFF_VIEW_URI_SCHEME } from "@hosts/vscode/VscodeDiffViewProvider"
 import assert from "node:assert"
@@ -85,7 +85,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	// Initialize test mode and add disposables to context
 	context.subscriptions.push(...testModeWatchers)
 
-	vscode.commands.executeCommand("setContext", "cline.isDevMode", IS_DEV && IS_DEV === "true")
+	vscode.commands.executeCommand("setContext", "blues-ai-coder.isDevMode", IS_DEV && IS_DEV === "true")
 
 	context.subscriptions.push(
 		vscode.window.registerWebviewViewProvider(WebviewProvider.sideBarId, sidebarWebview, {
@@ -130,7 +130,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	telemetryService.captureExtensionActivated(installId)
 
 	context.subscriptions.push(
-		vscode.commands.registerCommand("cline.plusButtonClicked", async (webview: any) => {
+		vscode.commands.registerCommand("blues-ai-coder.plusButtonClicked", async (webview: any) => {
 			// Pass the webview type to the event sender
 			const isSidebar = !webview
 
@@ -156,7 +156,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	)
 
 	context.subscriptions.push(
-		vscode.commands.registerCommand("cline.mcpButtonClicked", (webview: any) => {
+		vscode.commands.registerCommand("blues-ai-coder.mcpButtonClicked", (webview: any) => {
 			const activeInstance = WebviewProvider.getActiveInstance()
 			const isSidebar = !webview
 
@@ -212,11 +212,11 @@ export async function activate(context: vscode.ExtensionContext) {
 		await vscode.commands.executeCommand("workbench.action.lockEditorGroup")
 	}
 
-	context.subscriptions.push(vscode.commands.registerCommand("cline.popoutButtonClicked", openClineInNewTab))
-	context.subscriptions.push(vscode.commands.registerCommand("cline.openInNewTab", openClineInNewTab))
+	context.subscriptions.push(vscode.commands.registerCommand("blues-ai-coder.popoutButtonClicked", openClineInNewTab))
+	context.subscriptions.push(vscode.commands.registerCommand("blues-ai-coder.openInNewTab", openClineInNewTab))
 
 	context.subscriptions.push(
-		vscode.commands.registerCommand("cline.settingsButtonClicked", (webview: any) => {
+		vscode.commands.registerCommand("blues-ai-coder.settingsButtonClicked", (webview: any) => {
 			const isSidebar = !webview
 			const webviewType = isSidebar ? WebviewProviderTypeEnum.SIDEBAR : WebviewProviderTypeEnum.TAB
 
@@ -225,7 +225,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	)
 
 	context.subscriptions.push(
-		vscode.commands.registerCommand("cline.historyButtonClicked", async (webview: any) => {
+		vscode.commands.registerCommand("blues-ai-coder.historyButtonClicked", async (webview: any) => {
 			// Pass the webview type to the event sender
 			const isSidebar = !webview
 			const webviewType = isSidebar ? WebviewProviderTypeEnum.SIDEBAR : WebviewProviderTypeEnum.TAB
@@ -236,7 +236,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	)
 
 	context.subscriptions.push(
-		vscode.commands.registerCommand("cline.accountButtonClicked", (webview: any) => {
+		vscode.commands.registerCommand("blues-ai-coder.accountButtonClicked", (webview: any) => {
 			const isSidebar = !webview
 			if (isSidebar) {
 				const sidebarInstance = WebviewProvider.getSidebarInstance()
@@ -315,40 +315,43 @@ export async function activate(context: vscode.ExtensionContext) {
 	}
 
 	context.subscriptions.push(
-		vscode.commands.registerCommand("cline.addToChat", async (range?: vscode.Range, diagnostics?: vscode.Diagnostic[]) => {
-			await vscode.commands.executeCommand("cline.focusChatInput") // Ensure Cline is visible and input focused
-			await pWaitFor(() => !!WebviewProvider.getVisibleInstance())
-			const editor = vscode.window.activeTextEditor
-			if (!editor) {
-				return
-			}
+		vscode.commands.registerCommand(
+			"blues-ai-coder.addToChat",
+			async (range?: vscode.Range, diagnostics?: vscode.Diagnostic[]) => {
+				await vscode.commands.executeCommand("blues-ai-coder.focusChatInput") // Ensure Cline is visible and input focused
+				await pWaitFor(() => !!WebviewProvider.getVisibleInstance())
+				const editor = vscode.window.activeTextEditor
+				if (!editor) {
+					return
+				}
 
-			// Use provided range if available, otherwise use current selection
-			// (vscode command passes an argument in the first param by default, so we need to ensure it's a Range object)
-			const textRange = range instanceof vscode.Range ? range : editor.selection
-			const selectedText = editor.document.getText(textRange)
+				// Use provided range if available, otherwise use current selection
+				// (vscode command passes an argument in the first param by default, so we need to ensure it's a Range object)
+				const textRange = range instanceof vscode.Range ? range : editor.selection
+				const selectedText = editor.document.getText(textRange)
 
-			if (!selectedText) {
-				return
-			}
+				if (!selectedText) {
+					return
+				}
 
-			// Get the file path and language ID
-			const filePath = editor.document.uri.fsPath
-			const languageId = editor.document.languageId
+				// Get the file path and language ID
+				const filePath = editor.document.uri.fsPath
+				const languageId = editor.document.languageId
 
-			const visibleWebview = WebviewProvider.getVisibleInstance()
-			await visibleWebview?.controller.addSelectedCodeToChat(
-				selectedText,
-				filePath,
-				languageId,
-				Array.isArray(diagnostics) ? diagnostics : undefined,
-			)
-			telemetryService.captureButtonClick("codeAction_addToChat", visibleWebview?.controller.task?.taskId)
-		}),
+				const visibleWebview = WebviewProvider.getVisibleInstance()
+				await visibleWebview?.controller.addSelectedCodeToChat(
+					selectedText,
+					filePath,
+					languageId,
+					Array.isArray(diagnostics) ? diagnostics : undefined,
+				)
+				telemetryService.captureButtonClick("codeAction_addToChat", visibleWebview?.controller.task?.taskId)
+			},
+		),
 	)
 
 	context.subscriptions.push(
-		vscode.commands.registerCommand("cline.addTerminalOutputToChat", async () => {
+		vscode.commands.registerCommand("blues-ai-coder.addTerminalOutputToChat", async () => {
 			const terminal = vscode.window.activeTerminal
 			if (!terminal) {
 				return
@@ -451,7 +454,7 @@ export async function activate(context: vscode.ExtensionContext) {
 					// Add to Cline (Always available)
 					const addAction = new vscode.CodeAction("Add to Cline", vscode.CodeActionKind.QuickFix)
 					addAction.command = {
-						command: "cline.addToChat",
+						command: "blues-ai-coder.addToChat",
 						title: "Add to Cline",
 						arguments: [expandedRange, context.diagnostics],
 					}
@@ -460,7 +463,7 @@ export async function activate(context: vscode.ExtensionContext) {
 					// Explain with Cline (Always available)
 					const explainAction = new vscode.CodeAction("Explain with Cline", vscode.CodeActionKind.RefactorExtract) // Using a refactor kind
 					explainAction.command = {
-						command: "cline.explainCode",
+						command: "blues-ai-coder.explainCode",
 						title: "Explain with Cline",
 						arguments: [expandedRange],
 					}
@@ -469,7 +472,7 @@ export async function activate(context: vscode.ExtensionContext) {
 					// Improve with Cline (Always available)
 					const improveAction = new vscode.CodeAction("Improve with Cline", vscode.CodeActionKind.RefactorRewrite) // Using a refactor kind
 					improveAction.command = {
-						command: "cline.improveCode",
+						command: "blues-ai-coder.improveCode",
 						title: "Improve with Cline",
 						arguments: [expandedRange],
 					}
@@ -480,7 +483,7 @@ export async function activate(context: vscode.ExtensionContext) {
 						const fixAction = new vscode.CodeAction("Fix with Cline", vscode.CodeActionKind.QuickFix)
 						fixAction.isPreferred = true
 						fixAction.command = {
-							command: "cline.fixWithCline",
+							command: "blues-ai-coder.fixWithCline",
 							title: "Fix with Cline",
 							arguments: [expandedRange, context.diagnostics],
 						}
@@ -501,30 +504,33 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	// Register the command handler
 	context.subscriptions.push(
-		vscode.commands.registerCommand("cline.fixWithCline", async (range: vscode.Range, diagnostics: vscode.Diagnostic[]) => {
-			// Add this line to focus the chat input first
-			await vscode.commands.executeCommand("cline.focusChatInput")
-			// Wait for a webview instance to become visible after focusing
-			await pWaitFor(() => !!WebviewProvider.getVisibleInstance())
-			const editor = vscode.window.activeTextEditor
-			if (!editor) {
-				return
-			}
+		vscode.commands.registerCommand(
+			"blues-ai-coder.fixWithCline",
+			async (range: vscode.Range, diagnostics: vscode.Diagnostic[]) => {
+				// Add this line to focus the chat input first
+				await vscode.commands.executeCommand("blues-ai-coder.focusChatInput")
+				// Wait for a webview instance to become visible after focusing
+				await pWaitFor(() => !!WebviewProvider.getVisibleInstance())
+				const editor = vscode.window.activeTextEditor
+				if (!editor) {
+					return
+				}
 
-			const selectedText = editor.document.getText(range)
-			const filePath = editor.document.uri.fsPath
-			const languageId = editor.document.languageId
+				const selectedText = editor.document.getText(range)
+				const filePath = editor.document.uri.fsPath
+				const languageId = editor.document.languageId
 
-			// Send to sidebar provider with diagnostics
-			const visibleWebview = WebviewProvider.getVisibleInstance()
-			await visibleWebview?.controller.fixWithCline(selectedText, filePath, languageId, diagnostics)
-			telemetryService.captureButtonClick("codeAction_fixWithCline", visibleWebview?.controller.task?.taskId)
-		}),
+				// Send to sidebar provider with diagnostics
+				const visibleWebview = WebviewProvider.getVisibleInstance()
+				await visibleWebview?.controller.fixWithCline(selectedText, filePath, languageId, diagnostics)
+				telemetryService.captureButtonClick("codeAction_fixWithCline", visibleWebview?.controller.task?.taskId)
+			},
+		),
 	)
 
 	context.subscriptions.push(
-		vscode.commands.registerCommand("cline.explainCode", async (range: vscode.Range) => {
-			await vscode.commands.executeCommand("cline.focusChatInput") // Ensure Cline is visible and input focused
+		vscode.commands.registerCommand("blues-ai-coder.explainCode", async (range: vscode.Range) => {
+			await vscode.commands.executeCommand("blues-ai-coder.focusChatInput") // Ensure Cline is visible and input focused
 			await pWaitFor(() => !!WebviewProvider.getVisibleInstance())
 			const editor = vscode.window.activeTextEditor
 			if (!editor) {
@@ -548,8 +554,8 @@ export async function activate(context: vscode.ExtensionContext) {
 	)
 
 	context.subscriptions.push(
-		vscode.commands.registerCommand("cline.improveCode", async (range: vscode.Range) => {
-			await vscode.commands.executeCommand("cline.focusChatInput") // Ensure Cline is visible and input focused
+		vscode.commands.registerCommand("blues-ai-coder.improveCode", async (range: vscode.Range) => {
+			await vscode.commands.executeCommand("blues-ai-coder.focusChatInput") // Ensure Cline is visible and input focused
 			await pWaitFor(() => !!WebviewProvider.getVisibleInstance())
 			const editor = vscode.window.activeTextEditor
 			if (!editor) {
@@ -574,7 +580,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	// Register the focusChatInput command handler
 	context.subscriptions.push(
-		vscode.commands.registerCommand("cline.focusChatInput", async () => {
+		vscode.commands.registerCommand("blues-ai-coder.focusChatInput", async () => {
 			let activeWebviewProvider: WebviewProvider | undefined = WebviewProvider.getVisibleInstance()
 
 			// If a tab is visible and active, ensure it's fully revealed (might be redundant but safe)
@@ -603,7 +609,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
 				if (!activeWebviewProvider) {
 					// No existing Cline view found at all, open a new tab
-					await vscode.commands.executeCommand("cline.openInNewTab")
+					await vscode.commands.executeCommand("blues-ai-coder.openInNewTab")
 					// After openInNewTab, a new webview is created. We need to get this new instance.
 					// It might take a moment for it to register.
 					await pWaitFor(
@@ -636,7 +642,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	// Register the openWalkthrough command handler
 	context.subscriptions.push(
-		vscode.commands.registerCommand("cline.openWalkthrough", async () => {
+		vscode.commands.registerCommand("blues-ai-coder.openWalkthrough", async () => {
 			await vscode.commands.executeCommand(
 				"workbench.action.openWalkthrough",
 				"saoudrizwan.blues-ai-coder#ClineWalkthrough",
@@ -647,10 +653,10 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	// Register the generateGitCommitMessage command handler
 	context.subscriptions.push(
-		vscode.commands.registerCommand("cline.generateGitCommitMessage", async (scm) => {
+		vscode.commands.registerCommand("blues-ai-coder.generateGitCommitMessage", async (scm) => {
 			await GitCommitGenerator?.generate?.(context, scm)
 		}),
-		vscode.commands.registerCommand("cline.abortGitCommitMessage", () => {
+		vscode.commands.registerCommand("blues-ai-coder.abortGitCommitMessage", () => {
 			GitCommitGenerator?.abort?.()
 		}),
 	)
